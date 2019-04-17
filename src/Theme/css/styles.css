@@ -1,0 +1,35 @@
+h1 {
+    font-size: 2rem;
+    border-bottom: 1px solid #000;
+}
+
+span.status {
+    font-size: .8rem;
+    padding: .3rem .5rem .3rem .5rem;
+    margin-right: 1rem;
+    border-radius: .3rem;
+}
+
+span.status.status-1 {
+    background: #0f0;
+}
+
+span.status.status-0 {
+    background: #0f0;
+}
+
+span.status.status--1 {
+    background: #0f0;
+}
+
+span.status.status--2 {
+    background: #0f0;
+}
+
+span.status.status--3 {
+    background: #0f0;
+}
+
+span.status.status--4 {
+    background: #0f0;
+}
