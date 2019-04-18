@@ -14,7 +14,7 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 
 ## Demo
 
-http://orange-management.org/Inspection/Test/Php/TestReport/index.htm
+http://orange-management.org/Inspection/Test/ReportExternal/index.htm
 
 ## Usage
 
