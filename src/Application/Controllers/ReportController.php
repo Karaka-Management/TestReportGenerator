@@ -39,6 +39,32 @@ class ReportController
         $testView = new TestView();
         $testView->setTemplate(!realpath($this->template) || !file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme/index' : $this->template . '/index');
 
+        $this->handleCmdData($testView);
+
+        $domTest = new \DOMDocument();
+        $domTest->loadXML(file_get_contents($this->testLog));
+
+        // todo: handle untested methods
+        // suggestion: this can be done by defining every suit and test as untested in the testReportData (in handleLanguage) and than reduce the amount for every found test (in handleTests and handleSuits)
+        $testReportData = [];
+        $this->handleLanguage($testReportData, $testView);
+        $this->handleTests($testReportData, $domTest, $testView);
+        $this->handleSuits($testReportData, $domTest, $testView);
+
+        if (file_exists($this->codeCoverage)) {
+            $domCoverage = new \DOMDocument();
+            $domCoverage->loadXML(file_get_contents($this->codeCoverage));
+
+            $this->handleCoverage($testReportData, $domCoverage, $testView);
+        }
+
+        $testView->setTestResult($testReportData);
+
+        file_put_contents($this->destination . '/index.htm', $testView->render());
+    }
+
+    private function handleCmdData($testView) : void
+    {
         $data = [];
         $length = count($this->data);
 
@@ -50,15 +76,13 @@ class ReportController
         }
 
         $testView->setCmdData($data);
+    }
 
-        $langArrayKeys  = array_keys($this->langArray);
-        $testReportData = [];
-        $lang           = [];
-
-        $dom = new \DOMDocument();
-        $dom->loadXML(file_get_contents($this->testLog));
-
+    private function handleLanguage(array &$testReportData, $testView) : void
+    {
+        $lang  = [];
         $order = 0;
+
         foreach ($this->langArray as $key => $text) {
             if (($key[0] ?? '') === ':') {
                 $lang[$key] = $text;
@@ -77,7 +101,10 @@ class ReportController
         }
 
         $testView->setLanguage($lang);
+    }
 
+    private function handleTests(array &$testReportData, $dom, $testView) : void
+    {
         $testcases = $dom->getElementsByTagName('testcase');
         foreach ($testcases as $testcase) {
             $class = $testcase->getAttribute('class');
@@ -94,6 +121,16 @@ class ReportController
             $failures = $testcase->getElementsByTagName('failure');
             $errors   = $testcase->getElementsByTagName('error');
 
+            $testView->addSkipps($skipps->length);
+            $testView->addWarnings($warnings->length);
+            $testView->addFailures($failures->length);
+            $testView->addErrors($errors->length);
+
+            $testView->addAssertions((int) $testcase->getAttribute('assertions'));
+            $testView->addDuration((float) $testcase->getAttribute('time'));
+
+            $testView->incrementTests();
+
             if ($errors->length > 0) {
                 $testReportData[$class . ':' . $test]['status'] = -4;
             } elseif ($failures->length > 0) {
@@ -106,19 +143,34 @@ class ReportController
                 $testReportData[$class . ':' . $test]['status'] = 1;
             }
         }
+    }
 
+    private function handleSuits(array &$testReportData, $dom, $testView) : void
+    {
         $testsuites = $dom->getElementsByTagName('testsuite');
         foreach ($testsuites as $testsuite) {
-            $class = $testsuite->getAttribute('class');
+            $class = $testsuite->getAttribute('name');
 
             if (!isset($this->langArray[$class])) {
                 continue;
             }
 
-            $skipps   = $testcase->getElementsByTagName('skipped');
-            $warnings = $testcase->getElementsByTagName('warning');
-            $failures = $testcase->getElementsByTagName('failure');
-            $errors   = $testcase->getElementsByTagName('error');
+            $skipps   = $testsuite->getElementsByTagName('skipped');
+            $warnings = $testsuite->getElementsByTagName('warning');
+            $failures = $testsuite->getElementsByTagName('failure');
+            $errors   = $testsuite->getElementsByTagName('error');
+
+            $testView->addSuiteSkipps($skipps->length);
+            $testView->addSuiteWarnings($warnings->length);
+            $testView->addSuiteFailures($failures->length);
+            $testView->addSuiteErrors($errors->length);
+
+            $testView->incrementSuits();
+
+            $skipps   = $testsuite->getElementsByTagName('skipped');
+            $warnings = $testsuite->getElementsByTagName('warning');
+            $failures = $testsuite->getElementsByTagName('failure');
+            $errors   = $testsuite->getElementsByTagName('error');
 
             if ($errors->length > 0) {
                 $testReportData[$class]['status'] = -4;
@@ -132,10 +184,25 @@ class ReportController
                 $testReportData[$class]['status'] = 1;
             }
         }
+    }
 
-        $testView->setTestResult($testReportData);
+    private function handleCoverage(array &$testReportData, $dom, $testView) : void
+    {
+        $classes = $dom->getElementsByTagName('class');
+        foreach ($classes as $class) {
+            $metrics = $class->getElementsByTagName('metrics');
 
-        file_put_contents($this->destination . '/index.htm', $testView->render());
+            if ($metrics->length === 0) {
+                continue;
+            }
+
+            $testView->addMethods((int) $metrics[0]->getAttribute('methods'));
+            $testView->addMethodsCovered((int) $metrics[0]->getAttribute('coveredmethods'));
+            $testView->addStatements((int) $metrics[0]->getAttribute('statements'));
+            $testView->addStatementsCovered((int) $metrics[0]->getAttribute('coveredstatements'));
+            $testView->addConditionals((int) $metrics[0]->getAttribute('conditionals'));
+            $testView->addConditionalsCovered((int) $metrics[0]->getAttribute('coveredconditionals'));
+        }
     }
 
     private function createOutputDir() : void

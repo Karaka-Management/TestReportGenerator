@@ -1,6 +1,66 @@
+body {
+    font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
+}
+
+p {
+    line-height: 1.6rem;
+    font-size: 1rem;
+}
+
+h1, h2, h3 {
+    color: #643bbb;
+}
+
 h1 {
-    font-size: 2rem;
+    font-size: 3rem;
     border-bottom: 1px solid #000;
+    margin: 0;
+}
+
+table {
+    text-align: left;
+    width: 100%;
+}
+
+table {
+    margin: 1rem 0 1rem 0;
+}
+
+table thead {
+    text-align: center;
+}
+
+table th, table td {
+    padding: .5rem;
+}
+
+table thead th {
+    font-weight: bold;
+    background: #b498ef;
+}
+
+table tbody th {
+    font-weight: normal;
+}
+
+table tbody tr:nth-child(2n + 1) th, table tbody tr:nth-child(2n + 1) td {
+    background: #fff;
+}
+
+table tbody tr:nth-child(2n) th, table tbody tr:nth-child(2n) td {
+    background: #f3f3f9;
+}
+
+li {
+    padding: .3rem 0 .3rem 0;
+}
+
+a, a:hover, a:link {
+    color: #643bbb;
+}
+
+header p {
+    margin: 0;
 }
 
 span.status {
@@ -11,25 +71,25 @@ span.status {
 }
 
 span.status.status-1 {
-    background: #0f0;
+    background: #69ff69;
 }
 
 span.status.status-0 {
-    background: #0f0;
+    background: #e8eae8;
 }
 
 span.status.status--1 {
-    background: #0f0;
+    background: #8fff8f;
 }
 
 span.status.status--2 {
-    background: #0f0;
+    background: #fffd63;
 }
 
 span.status.status--3 {
-    background: #0f0;
+    background: #ff6363;
 }
 
 span.status.status--4 {
-    background: #0f0;
+    background: #ff0000;
 }
