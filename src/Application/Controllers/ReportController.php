@@ -160,10 +160,10 @@ class ReportController
             $failures = $testsuite->getElementsByTagName('failure');
             $errors   = $testsuite->getElementsByTagName('error');
 
-            $testView->addSuiteSkipps($skipps->length);
-            $testView->addSuiteWarnings($warnings->length);
-            $testView->addSuiteFailures($failures->length);
-            $testView->addSuiteErrors($errors->length);
+            $testView->addSuiteSkipps($skipps->length > 0 ? 1 : 0);
+            $testView->addSuiteWarnings($warnings->length > 0 ? 1 : 0);
+            $testView->addSuiteFailures($failures->length > 0 ? 1 : 0);
+            $testView->addSuiteErrors($errors->length > 0 ? 1 : 0);
 
             $testView->incrementSuits();
 
