@@ -6,7 +6,7 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 
 * Support of multiple languages
 * Customize which test results should be included in the report
-* Customize report template
+* Customizable report template
 
 ## Requirements
 
