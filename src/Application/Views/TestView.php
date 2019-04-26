@@ -150,18 +150,18 @@ class TestView
         $ob   = '';
         $path = $this->template . '.tpl.php';
 
-        if (!file_exists($path)) {
+        if (!\file_exists($path)) {
             throw new \Exception($path);
         }
 
         try {
-            ob_start();
+            \ob_start();
             /** @noinspection PhpIncludeInspection */
             $includeData = include $path;
 
-            $ob = ob_get_clean();
+            $ob = \ob_get_clean();
 
-            if (is_array($includeData)) {
+            if (\is_array($includeData)) {
                 return $includeData;
             }
         } catch(\Throwable $e) {

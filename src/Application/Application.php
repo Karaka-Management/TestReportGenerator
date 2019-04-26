@@ -12,24 +12,24 @@ class Application
     {
         $this->setupHandlers();
 
-        $help        = ($key = array_search('-h', $argv)) === false || $key === count($argv) - 1 ? null : trim($argv[$key + 1], '" ');
-        $destination = ($key = array_search('-d', $argv)) === false || $key === count($argv) - 1 ? null : trim($argv[$key + 1], '" ');
-        $testLog     = ($key = array_search('-u', $argv)) === false || $key === count($argv) - 1 ? null : trim($argv[$key + 1], '" ');
-        $langArray   = ($key = array_search('-l', $argv)) === false || $key === count($argv) - 1 ? null : trim($argv[$key + 1], '" ');
+        $help        = ($key = \array_search('-h', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $destination = ($key = \array_search('-d', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $testLog     = ($key = \array_search('-u', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $langArray   = ($key = \array_search('-l', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
 
         if (isset($help) || !isset($destination) || !isset($testLog) || !isset($langArray)) {
             $this->printUsage();
         } else {
-            $destination = rtrim($destination, '/\\');
-            $testLog     = rtrim($testLog, '/\\');
-            $langArray   = rtrim($langArray, '/\\');
+            $destination = \rtrim($destination, '/\\');
+            $testLog     = \rtrim($testLog, '/\\');
+            $langArray   = \rtrim($langArray, '/\\');
 
-            if (!file_exists($testLog)) {
+            if (!\file_exists($testLog)) {
                 echo 'File ' . $testLog . ' doesn\'t exist.' . "\n";
                 return;
             }
 
-            if (!file_exists($langArray)) {
+            if (!\file_exists($langArray)) {
                 echo 'File ' . $langArray . ' doesn\'t exist.' . "\n";
                 return;
             }
@@ -40,39 +40,39 @@ class Application
 
     private function setupHandlers()
     {
-        set_exception_handler(function(\Throwable $e) {
+        \set_exception_handler(function(\Throwable $e) {
             echo $e->getLine(), ': ' , $e->getMessage();
         });
 
-        set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline) {
-            if (!(error_reporting() & $errno)) {
+        \set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline) {
+            if (!(\error_reporting() & $errno)) {
                 echo $errline , ': ' , $errfile;
             }
         });
 
-        register_shutdown_function(function() {
-            $e = error_get_last();
+        \register_shutdown_function(function() {
+            $e = \error_get_last();
 
             if (isset($e)) {
                 echo $e['line'] , ': ' , $e['message'];
             }
         });
 
-        mb_internal_encoding('UTF-8');
+        \mb_internal_encoding('UTF-8');
     }
 
     private function createReport(string $destination, string $testLog, string $langArray, array $argv)
     {
-        $template     = ($key = array_search('-t', $argv)) === false || $key === count($argv) - 1 ? null : trim($argv[$key + 1], '" ');
-        $codeCoverage = ($key = array_search('-c', $argv)) === false || $key === count($argv) - 1 ? null : trim($argv[$key + 1], '" ');
-        $version      = ($key = array_search('-v', $argv)) === false || $key === count($argv) - 1 ? null : trim($argv[$key + 1], '" ');
+        $template     = ($key = \array_search('-t', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $codeCoverage = ($key = \array_search('-c', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $version      = ($key = \array_search('-v', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
 
-        if ($template !== null && !file_exists($template)) {
+        if ($template !== null && !\file_exists($template)) {
             echo 'File ' . $template . ' doesn\'t exist.' . "\n";
             return;
         }
 
-        if ($codeCoverage !== null && !file_exists($codeCoverage)) {
+        if ($codeCoverage !== null && !\file_exists($codeCoverage)) {
             echo 'File ' . $codeCoverage . ' doesn\'t exist.' . "\n";
             return;
         }

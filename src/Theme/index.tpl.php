@@ -62,19 +62,19 @@
                                 <td><?= $this->methods; ?>
                                 <td><?= $this->methodsCovered; ?>
                                 <td><?= $this->methods - $this->methodsCovered; ?>
-                                <td><?= number_format((float) (100 * ($this->methods !== 0 ? $this->methodsCovered / $this->methods : 1)), 1); ?>%
+                                <td><?= \number_format((float) (100 * ($this->methods !== 0 ? $this->methodsCovered / $this->methods : 1)), 1); ?>%
                             <tr>
                                 <th><?= $this->getText(':statements'); ?>
                                 <td><?= $this->statements; ?>
                                 <td><?= $this->statementsCovered; ?>
                                 <td><?= $this->statements - $this->statementsCovered; ?>
-                                <td><?= number_format((float) (100 * ($this->statements !== 0 ? $this->statementsCovered / $this->statements : 1)), 1); ?>%
+                                <td><?= \number_format((float) (100 * ($this->statements !== 0 ? $this->statementsCovered / $this->statements : 1)), 1); ?>%
                             <tr>
                                 <th><?= $this->getText(':conditionals'); ?>
                                 <td><?= $this->conditionals; ?>
                                 <td><?= $this->conditionalsCovered; ?>
                                 <td><?= $this->conditionals - $this->conditionalsCovered; ?>
-                                <td><?= number_format((float) (100 * ($this->conditionals !== 0 ? $this->conditionalsCovered / $this->conditionals : 1)), 1); ?>%
+                                <td><?= \number_format((float) (100 * ($this->conditionals !== 0 ? $this->conditionalsCovered / $this->conditionals : 1)), 1); ?>%
                     </table>
 
                     <h3><?= $this->getText(':testing_summary_tests'); ?></h3>

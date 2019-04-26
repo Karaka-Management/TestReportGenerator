@@ -37,12 +37,12 @@ class ReportController
         $this->createBaseFiles();
 
         $testView = new TestView();
-        $testView->setTemplate(!realpath($this->template) || !file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme/index' : $this->template . '/index');
+        $testView->setTemplate(!\realpath($this->template) || !\file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme/index' : $this->template . '/index');
 
         $this->handleCmdData($testView);
 
         $domTest = new \DOMDocument();
-        $domTest->loadXML(file_get_contents($this->testLog));
+        $domTest->loadXML(\file_get_contents($this->testLog));
 
         // todo: handle untested methods
         // suggestion: this can be done by defining every suit and test as untested in the testReportData (in handleLanguage) and than reduce the amount for every found test (in handleTests and handleSuits)
@@ -51,26 +51,26 @@ class ReportController
         $this->handleTests($testReportData, $domTest, $testView);
         $this->handleSuits($testReportData, $domTest, $testView);
 
-        if (file_exists($this->codeCoverage)) {
+        if (\file_exists($this->codeCoverage)) {
             $domCoverage = new \DOMDocument();
-            $domCoverage->loadXML(file_get_contents($this->codeCoverage));
+            $domCoverage->loadXML(\file_get_contents($this->codeCoverage));
 
             $this->handleCoverage($testReportData, $domCoverage, $testView);
         }
 
         $testView->setTestResult($testReportData);
 
-        file_put_contents($this->destination . '/index.htm', $testView->render());
+        \file_put_contents($this->destination . '/index.htm', $testView->render());
     }
 
     private function handleCmdData($testView) : void
     {
         $data = [];
-        $length = count($this->data);
+        $length = \count($this->data);
 
         for ($i = 0; $i < $length; ++$i) {
-            if (substr($this->data[$i], 0, 2) === '--') {
-                $data[substr($this->data[$i], 2)] = $this->data[$i+1];
+            if (\substr($this->data[$i], 0, 2) === '--') {
+                $data[\substr($this->data[$i], 2)] = $this->data[$i+1];
                 ++$i;
             }
         }
@@ -90,7 +90,7 @@ class ReportController
             }
 
             $testReportData[$key] = [
-                'type'   => stripos($key, ':') !== false ? 'testcase' : 'testsuite',
+                'type'   => \stripos($key, ':') !== false ? 'testcase' : 'testsuite',
                 'status' => 0,
                 'time'   => 0,
                 'info'   => $text,
@@ -207,36 +207,36 @@ class ReportController
 
     private function createOutputDir() : void
     {
-        if (!file_exists($this->destiation)) {
-            mkdir($this->destination, 0777, true);
+        if (!\file_exists($this->destiation)) {
+            \mkdir($this->destination, 0777, true);
         }
     }
 
     private function createBaseFiles() : void
     {
-        $path = !realpath($this->template) || !file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme' : $this->template;
+        $path = !\realpath($this->template) || !\file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme' : $this->template;
         $this->recursiveCopy($path, $this->destination);
     }
 
     private function recursiveCopy(string $src, string $dest) : void
     {
-        if (is_file($src)) {
-            copy($src, $dest);
+        if (\is_file($src)) {
+            \copy($src, $dest);
 
             return;
         }
 
-        if (!is_dir($dest)) {
-            mkdir ($dest, 0777);
+        if (!\is_dir($dest)) {
+            \mkdir ($dest, 0777);
         }
 
-        $dir = dir($src);
+        $dir = \dir($src);
         if ($dir === false) {
             return;
         }
 
         while (($sub = $dir->read()) !== false) {
-            if ($sub === '.' || $sub === '..' || substr($sub, -4) === '.php') {
+            if ($sub === '.' || $sub === '..' || \substr($sub, -4) === '.php') {
                 continue;
             }
 
