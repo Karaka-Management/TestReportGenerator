@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace TestReportGenerator\src\Application;
 
@@ -38,19 +38,19 @@ class Application
         }
     }
 
-    private function setupHandlers()
+    private function setupHandlers(): void
     {
-        \set_exception_handler(function(\Throwable $e) {
+        \set_exception_handler(function(\Throwable $e): void {
             echo $e->getLine(), ': ' , $e->getMessage();
         });
 
-        \set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline) {
+        \set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline): void {
             if (!(\error_reporting() & $errno)) {
                 echo $errline , ': ' , $errfile;
             }
         });
 
-        \register_shutdown_function(function() {
+        \register_shutdown_function(function(): void {
             $e = \error_get_last();
 
             if (isset($e)) {
@@ -61,7 +61,7 @@ class Application
         \mb_internal_encoding('UTF-8');
     }
 
-    private function createReport(string $destination, string $testLog, string $langArray, array $argv)
+    private function createReport(string $destination, string $testLog, string $langArray, array $argv): void
     {
         $template     = ($key = \array_search('-t', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
         $codeCoverage = ($key = \array_search('-c', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
@@ -81,7 +81,7 @@ class Application
         $this->reportController->createReport();
     }
 
-    private function printUsage()
+    private function printUsage(): void
     {
         echo 'Usage: -d <DESTINATION_PATH> -t <TEMPLATE> -u <JUNIT_UNIT_TEST_LOG> -c <CODE_COVERAGE_REPORT> -l <LANGUAGE_FILE>' . "\n\n";
         echo "\t" . '-d Destination directory (*optional* no theme definition will use the default theme).' . "\n";

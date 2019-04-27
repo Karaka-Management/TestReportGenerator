@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace TestReportGenerator\src\Application;
 
@@ -7,7 +7,7 @@ namespace TestReportGenerator\src\Application;
 class Autoloader
 {
 
-    public static function defaultAutoloader(string $class)
+    public static function defaultAutoloader(string $class): void
     {
         if (($classNew = self::exists($class)) !== false) {
             /** @noinspection PhpIncludeInspection */
@@ -20,7 +20,7 @@ class Autoloader
     public static function exists(string $class)
     {
         $class = \ltrim($class, '\\');
-        $class = \str_replace(['_', '\\'], DIRECTORY_SEPARATOR, $class);
+        $class = \str_replace(['_', '\\'], \DIRECTORY_SEPARATOR, $class);
 
         if (\file_exists(__DIR__ . '/../../../' . $class . '.php')) {
             return __DIR__ . '/../../../' . $class . '.php';

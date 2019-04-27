@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 namespace TestReportGenerator\src\Application\Views;
 
 class TestView
@@ -102,12 +102,12 @@ class TestView
 
     public function incrementTests() : void
     {
-        $this->tests++;
+        ++$this->tests;
     }
 
     public function incrementSuits() : void
     {
-        $this->suits++;
+        ++$this->suits;
     }
 
     public function addAssertions(int $assertions) : void
