@@ -7,7 +7,7 @@ namespace TestReportGenerator\src\Application;
 class Autoloader
 {
 
-    public static function defaultAutoloader(string $class): void
+    public static function defaultAutoloader(string $class) : void
     {
         if (($classNew = self::exists($class)) !== false) {
             /** @noinspection PhpIncludeInspection */
