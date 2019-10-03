@@ -19,23 +19,25 @@ class Application
 
         if (isset($help) || !isset($destination) || !isset($testLog) || !isset($langArray)) {
             $this->printUsage();
-        } else {
-            $destination = \rtrim($destination, '/\\');
-            $testLog     = \rtrim($testLog, '/\\');
-            $langArray   = \rtrim($langArray, '/\\');
-
-            if (!\file_exists($testLog)) {
-                echo 'File ' . $testLog . ' doesn\'t exist.' . "\n";
-                return;
-            }
-
-            if (!\file_exists($langArray)) {
-                echo 'File ' . $langArray . ' doesn\'t exist.' . "\n";
-                return;
-            }
-
-            $this->createReport($destination, $testLog, $langArray, $argv);
+            
+            return;
         }
+        
+        $destination = \rtrim($destination, '/\\');
+        $testLog     = \rtrim($testLog, '/\\');
+        $langArray   = \rtrim($langArray, '/\\');
+
+        if (!\file_exists($testLog)) {
+            echo 'File ' . $testLog . ' doesn\'t exist.' . "\n";
+            return;
+        }
+
+        if (!\file_exists($langArray)) {
+            echo 'File ' . $langArray . ' doesn\'t exist.' . "\n";
+            return;
+        }
+
+        $this->createReport($destination, $testLog, $langArray, $argv);
     }
 
     private function setupHandlers() : void
@@ -84,8 +86,8 @@ class Application
     private function printUsage() : void
     {
         echo 'Usage: -d <DESTINATION_PATH> -t <TEMPLATE> -u <JUNIT_UNIT_TEST_LOG> -c <CODE_COVERAGE_REPORT> -l <LANGUAGE_FILE>' . "\n\n";
-        echo "\t" . '-d Destination directory (*optional* no theme definition will use the default theme).' . "\n";
-        echo "\t" . '-t Template of the test report (has to be a directory containing a `index.tpl.php` which is rendered as `html` file during the generation process)' . "\n";
+        echo "\t" . '-d Destination directory' . "\n";
+        echo "\t" . '-t Template of the test report (has to be a directory containing a `index.tpl.php` which is rendered as `html` file during the generation process) (*optional* no theme definition will use the default theme).' . "\n";
         echo "\t" . '-u Unit test log (`junit` style)' . "\n";
         echo "\t" . '-c Code coverage source (`coverage-clover`) (*optional*)' . "\n";
         echo "\t" . '-l Language file (`php array`)' . "\n";
