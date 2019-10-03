@@ -33,8 +33,8 @@ php TestReportGenerator/src/index.php -d <DESTINATION_PATH> -t <TEMPLATE> -u <JU
 ### Arguments
 
 * `-h` Show help
-* `-d` Destination directory (*optional* no theme definition will use the default theme)
-* `-t` Template of the test report (has to be a directory containing a `index.tpl.php` which is rendered as `html` file during the generation process)
+* `-d` Destination directory
+* `-t` Template of the test report (has to be a directory containing a `index.tpl.php` which is rendered as `html` file during the generation process) (*optional* no theme definition will use the default theme)
 * `-u` Unit test log (`junit` style)
 * `-c` Code coverage source (`coverage-clover`) (*optional*)
 * `-l` Language file (`php array`)
