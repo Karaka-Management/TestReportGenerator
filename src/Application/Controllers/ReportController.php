@@ -37,7 +37,7 @@ class ReportController
         $this->createBaseFiles();
 
         $testView = new TestView();
-        $testView->setTemplate(!\realpath($this->template) || !\file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme/index' : $this->template . '/index');
+        $testView->setTemplate($this->template === null || !\realpath($this->template) || !\file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme/index' : $this->template . '/index');
 
         $this->handleCmdData($testView);
 
@@ -207,14 +207,14 @@ class ReportController
 
     private function createOutputDir() : void
     {
-        if (!\file_exists($this->destiation)) {
+        if (!\file_exists($this->destination)) {
             \mkdir($this->destination, 0777, true);
         }
     }
 
     private function createBaseFiles() : void
     {
-        $path = !\realpath($this->template) || !\file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme' : $this->template;
+        $path = $this->template === null || !\realpath($this->template) || !\file_exists($this->template . '/index.tpl.php') ? __DIR__ . '/../../Theme' : $this->template;
         $this->recursiveCopy($path, $this->destination);
     }
 

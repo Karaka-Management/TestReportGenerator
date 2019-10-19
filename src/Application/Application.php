@@ -19,10 +19,10 @@ class Application
 
         if (isset($help) || !isset($destination) || !isset($testLog) || !isset($langArray)) {
             $this->printUsage();
-            
+
             return;
         }
-        
+
         $destination = \rtrim($destination, '/\\');
         $testLog     = \rtrim($testLog, '/\\');
         $langArray   = \rtrim($langArray, '/\\');
