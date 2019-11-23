@@ -1,5 +1,6 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="css/styles.css">
     </head>
     <body>
@@ -69,12 +70,6 @@
                                 <td><?= $this->statementsCovered; ?>
                                 <td><?= $this->statements - $this->statementsCovered; ?>
                                 <td><?= \number_format((float) (100 * ($this->statements !== 0 ? $this->statementsCovered / $this->statements : 1)), 1); ?>%
-                            <tr>
-                                <th><?= $this->getText(':conditionals'); ?>
-                                <td><?= $this->conditionals; ?>
-                                <td><?= $this->conditionalsCovered; ?>
-                                <td><?= $this->conditionals - $this->conditionalsCovered; ?>
-                                <td><?= \number_format((float) (100 * ($this->conditionals !== 0 ? $this->conditionalsCovered / $this->conditionals : 1)), 1); ?>%
                     </table>
 
                     <h3><?= $this->getText(':testing_summary_tests'); ?></h3>
@@ -111,13 +106,72 @@
                 </section>
                 <section id="tests">
                     <h2><?= $this->getText(':tests'); ?></h2>
-                    <?php foreach ($this->testresult as $result) : ?>
-                        <?php if ($result['type'] === 'testsuite') : ?>
+                    <?php $firstTestCase = false; $i = 0; foreach ($this->testresult as $result) : ++$i; ?>
+                        <?php if ($result['type'] === 'testsuite') : $firstTestCase = true; ?>
+                            <?php if ($i > 1) : /* close description table! */ ?>
+                                </table>
+                            <?php endif; ?>
+
                             <h3><?= $result['info']['description']; ?></h3>
+
+                            <section class="sub_testing_summary">
+                                <h4><?= $this->getText(':testing_summary_coverage'); ?></h4>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><?= $this->getText(':description'); ?>
+                                            <th><?= $this->getText(':total'); ?>
+                                            <th><?= $this->getText(':covered'); ?>
+                                            <th><?= $this->getText(':uncovered'); ?>
+                                            <th><?= $this->getText(':ratio'); ?>
+                                    <tbody>
+                                        <tr>
+                                            <th><?= $this->getText(':methods'); ?>
+                                            <td><?= $result['methods']; ?>
+                                            <td><?= $result['coveredmethods']; ?>
+                                            <td><?= $result['methods'] - $result['coveredmethods']; ?>
+                                            <td><?= \number_format((float) (100 * ($result['methods'] !== 0 ? $result['coveredmethods'] / $result['methods'] : 1)), 1); ?>%
+                                        <tr>
+                                            <th><?= $this->getText(':statements'); ?>
+                                            <td><?= $result['statements']; ?>
+                                            <td><?= $result['coveredstatements']; ?>
+                                            <td><?= $result['statements'] - $result['coveredstatements']; ?>
+                                            <td><?= \number_format((float) (100 * ($result['statements'] !== 0 ? $result['coveredstatements'] / $result['statements'] : 1)), 1); ?>%
+                                </table>
+
+                                <h4><?= $this->getText(':testing_summary_tests'); ?></h4>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th><?= $this->getText(':total'); ?>
+                                            <th><?= $this->getText(':successful'); ?>
+                                            <th><?= $this->getText(':skipps'); ?>
+                                            <th><?= $this->getText(':warnings'); ?>
+                                            <th><?= $this->getText(':failures'); ?>
+                                            <th><?= $this->getText(':errors'); ?>
+                                    <tbody>
+                                        <tr>
+                                            <td><?= $result['tests']; ?>
+                                            <td><?= $result['tests'] - $result['skips'] - $result['failures'] - $result['errors']; ?>
+                                            <td><?= $result['skips']; ?>
+                                            <td><?= $result['warnings']; ?>
+                                            <td><?= $result['failures']; ?>
+                                            <td><?= $result['errors']; ?>
+                                </table>
+                            </section>
                         <?php else : ?>
-                            <p><span class="status status-<?= $result['status']; ?>"><?= $this->getText(':status:' . $result['status']); ?></span><?= $result['info']['description']; ?> - <?= $result['time']; ?>s</p>
+                            <?php if ($firstTestCase) : $firstTestCase = false; ?>
+                                <h4><?= $this->getText(':testing_description'); ?></h4>
+                                <table>
+                                    <tbody>
+                            <?php endif; ?>
+                            <tr>
+                                <td><span class="status status-<?= $result['status']; ?>"><?= $this->getText(':status:' . $result['status']); ?></span>
+                                <td style="width: 100%;"><?= $result['info']['description']; ?>
+                                <td><?= $result['time']; ?>s
                         <?php endif; ?>
                     <?php endforeach; ?>
+                                </table>
                 </section>
                 <section id="disclaimer">
                     <h2><?= $this->getText(':disclaimer'); ?></h2>

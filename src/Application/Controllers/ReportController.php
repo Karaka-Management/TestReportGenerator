@@ -13,8 +13,6 @@ class ReportController
     private $data         = [];
     private $codeCoverage = null;
 
-    private $testView = null;
-
     public function __construct(
         string $destination,
         string $testLog,
@@ -116,18 +114,32 @@ class ReportController
 
             $testReportData[$class . ':' . $test]['time'] = $testcase->getAttribute('time');
 
-            $skipps   = $testcase->getElementsByTagName('skipped');
+            $skips    = $testcase->getElementsByTagName('skipped');
             $warnings = $testcase->getElementsByTagName('warning');
             $failures = $testcase->getElementsByTagName('failure');
             $errors   = $testcase->getElementsByTagName('error');
 
-            $testView->addSkipps($skipps->length);
+            $testView->addSkipps($skips->length);
             $testView->addWarnings($warnings->length);
             $testView->addFailures($failures->length);
             $testView->addErrors($errors->length);
 
             $testView->addAssertions((int) $testcase->getAttribute('assertions'));
             $testView->addDuration((float) $testcase->getAttribute('time'));
+
+            if (!isset($testReportData[$class])) {
+                $testReportData[$class]['tests']    = 0;
+                $testReportData[$class]['skips']    = 0;
+                $testReportData[$class]['warnings'] = 0;
+                $testReportData[$class]['failures'] = 0;
+                $testReportData[$class]['errors']   = 0;
+            }
+
+            ++$testReportData[$class]['tests'];
+            $testReportData[$class]['skips']    += $skips->length;
+            $testReportData[$class]['warnings'] += $warnings->length;
+            $testReportData[$class]['failures'] += $failures->length;
+            $testReportData[$class]['errors']   += $errors->length;
 
             $testView->incrementTests();
 
@@ -137,7 +149,7 @@ class ReportController
                 $testReportData[$class . ':' . $test]['status'] = -3;
             } elseif ($warnings->length > 0) {
                 $testReportData[$class . ':' . $test]['status'] = -2;
-            } elseif ($skipps->length > 0) {
+            } elseif ($skips->length > 0) {
                 $testReportData[$class . ':' . $test]['status'] = -1;
             } else {
                 $testReportData[$class . ':' . $test]['status'] = 1;
@@ -190,7 +202,13 @@ class ReportController
     {
         $classes = $dom->getElementsByTagName('class');
         foreach ($classes as $class) {
-            $metrics = $class->getElementsByTagName('metrics');
+            $metrics   = $class->getElementsByTagName('metrics');
+
+            $className = $class->getAttribute('name') . 'Test';
+            $exploded  = \explode('\\', $className);
+
+            \array_splice($exploded, 1, 0, 'tests');
+            $className = \implode('\\', $exploded);
 
             if ($metrics->length === 0) {
                 continue;
@@ -202,6 +220,17 @@ class ReportController
             $testView->addStatementsCovered((int) $metrics[0]->getAttribute('coveredstatements'));
             $testView->addConditionals((int) $metrics[0]->getAttribute('conditionals'));
             $testView->addConditionalsCovered((int) $metrics[0]->getAttribute('coveredconditionals'));
+
+            if (!isset($this->langArray[$className])) {
+                continue;
+            }
+
+            $testReportData[$className]['methods']             = (int) $metrics[0]->getAttribute('methods');
+            $testReportData[$className]['coveredmethods']      = (int) $metrics[0]->getAttribute('coveredmethods');
+            $testReportData[$className]['statements']          = (int) $metrics[0]->getAttribute('statements');
+            $testReportData[$className]['coveredstatements']   = (int) $metrics[0]->getAttribute('coveredstatements');
+            $testReportData[$className]['conditionals']        = (int) $metrics[0]->getAttribute('conditionals');
+            $testReportData[$className]['coveredconditionals'] = (int) $metrics[0]->getAttribute('coveredconditionals');
         }
     }
 
