@@ -30,6 +30,38 @@ class TestView
     protected $conditionals        = 0;
     protected $conditionalsCovered = 0;
 
+    protected $styleFiles    = 0;
+    protected $styleErrors   = 0;
+    protected $styleFailures = 0;
+
+    protected $staticFileErrors = 0;
+    protected $staticErrors     = 0;
+
+    public function addStaticErrors(int $staticErrors) : void
+    {
+        $this->staticErrors += $staticErrors;
+    }
+
+    public function incrementStaticFileErrors() : void
+    {
+        ++$this->staticFileErrors;
+    }
+
+    public function incrementStyleFiles() : void
+    {
+        ++$this->styleFiles;
+    }
+
+    public function addStyleErrors(int $styleErrors) : void
+    {
+        $this->styleErrors += $styleErrors;
+    }
+
+    public function addStyleFailures(int $styleFailures) : void
+    {
+        $this->styleFailures += $styleFailures;
+    }
+
     public function addMethods(int $methods) : void
     {
         $this->methods += $methods;

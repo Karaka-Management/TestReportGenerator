@@ -76,7 +76,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th><?= $this->getText(':testing_summary_coverage'); ?>
+                                <th><?= $this->getText(':description'); ?>
                                 <th><?= $this->getText(':total'); ?>
                                 <th><?= $this->getText(':successful'); ?>
                                 <th><?= $this->getText(':skipps'); ?>
@@ -99,6 +99,22 @@
                                 <td><?= $this->warnings; ?>
                                 <td><?= $this->failures; ?>
                                 <td><?= $this->errors; ?>
+                            <tr>
+                                <th><?= $this->getText(':static_tests'); ?>
+                                <td><?= $this->styleFiles; ?>
+                                <td><?= $this->styleFiles - $this->staticFileErrors; ?>
+                                <td>0
+                                <td>0
+                                <td>0
+                                <td><?= $this->staticFileErrors; ?>
+                            <tr>
+                                <th><?= $this->getText(':code_style'); ?>
+                                <td><?= $this->styleFiles; ?>
+                                <td><?= $this->styleFiles - $this->styleErrors; ?>
+                                <td>0
+                                <td><?= $this->styleFailures; ?>
+                                <td>0
+                                <td><?= $this->styleErrors; ?>
                     </table>
 
                     <p><?= $this->getText(':testing_summary_desc_2'); ?> <strong><?= $this->assertions; ?></strong></p>
@@ -143,6 +159,7 @@
                                 <table>
                                     <thead>
                                         <tr>
+                                            <th><?= $this->getText(':description'); ?>
                                             <th><?= $this->getText(':total'); ?>
                                             <th><?= $this->getText(':successful'); ?>
                                             <th><?= $this->getText(':skipps'); ?>
@@ -151,12 +168,29 @@
                                             <th><?= $this->getText(':errors'); ?>
                                     <tbody>
                                         <tr>
+                                            <td><?= $this->getText(':tests'); ?>
                                             <td><?= $result['tests']; ?>
                                             <td><?= $result['tests'] - $result['skips'] - $result['failures'] - $result['errors']; ?>
                                             <td><?= $result['skips']; ?>
                                             <td><?= $result['warnings']; ?>
                                             <td><?= $result['failures']; ?>
                                             <td><?= $result['errors']; ?>
+                                        <tr>
+                                            <td><?= $this->getText(':static_tests'); ?>
+                                            <td>1
+                                            <td><?= $result['staticerrors'] > 0 ? 0 : 1; ?>
+                                            <td>0
+                                            <td>0
+                                            <td>0
+                                            <td><?= $result['staticerrors'] ?? 0; ?>
+                                        <tr>
+                                            <td><?= $this->getText(':code_style'); ?>
+                                            <td>1
+                                            <td><?= $result['styleerrors'] > 0 || $result['stylefailures'] > 0 ? 0 : 1; ?>
+                                            <td>0
+                                            <td>0
+                                            <td><?= $result['stylefailures'] ?? 0; ?>
+                                            <td><?= $result['styleerrors'] ?? 0; ?>
                                 </table>
                             </section>
                         <?php else : ?>

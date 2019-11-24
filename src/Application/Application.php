@@ -16,8 +16,9 @@ class Application
         $destination = ($key = \array_search('-d', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
         $testLog     = ($key = \array_search('-u', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
         $langArray   = ($key = \array_search('-l', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $basePath    = ($key = \array_search('-b', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
 
-        if (isset($help) || !isset($destination) || !isset($testLog) || !isset($langArray)) {
+        if (isset($help) || !isset($destination) || !isset($testLog) || !isset($langArray) || !isset($basePath)) {
             $this->printUsage();
 
             return;
@@ -26,6 +27,7 @@ class Application
         $destination = \rtrim($destination, '/\\');
         $testLog     = \rtrim($testLog, '/\\');
         $langArray   = \rtrim($langArray, '/\\');
+        $basePath    = \rtrim($basePath, '/\\');
 
         if (!\file_exists($testLog)) {
             echo 'File ' . $testLog . ' doesn\'t exist.' . "\n";
@@ -37,7 +39,7 @@ class Application
             return;
         }
 
-        $this->createReport($destination, $testLog, $langArray, $argv);
+        $this->createReport($basePath, $destination, $testLog, $langArray, $argv);
     }
 
     private function setupHandlers() : void
@@ -63,11 +65,12 @@ class Application
         \mb_internal_encoding('UTF-8');
     }
 
-    private function createReport(string $destination, string $testLog, string $langArray, array $argv) : void
+    private function createReport(string $basePath, string $destination, string $testLog, string $langArray, array $argv) : void
     {
         $template     = ($key = \array_search('-t', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
         $codeCoverage = ($key = \array_search('-c', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
-        $version      = ($key = \array_search('-v', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $codeStyle    = ($key = \array_search('-s', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
+        $codeAnalysis = ($key = \array_search('-a', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[$key + 1], '" ');
 
         if ($template !== null && !\file_exists($template)) {
             echo 'File ' . $template . ' doesn\'t exist.' . "\n";
@@ -79,17 +82,20 @@ class Application
             return;
         }
 
-        $this->reportController = new ReportController($destination, $testLog, $langArray, $template, $codeCoverage, $argv);
+        $this->reportController = new ReportController($basePath, $destination, $testLog, $langArray, $template, $codeCoverage, $codeStyle, $codeAnalysis, $argv);
         $this->reportController->createReport();
     }
 
     private function printUsage() : void
     {
-        echo 'Usage: -d <DESTINATION_PATH> -t <TEMPLATE> -u <JUNIT_UNIT_TEST_LOG> -c <CODE_COVERAGE_REPORT> -l <LANGUAGE_FILE>' . "\n\n";
+        echo 'Usage: -b <BASE_PATH> -d <DESTINATION_PATH> -t <TEMPLATE> -u <JUNIT_UNIT_TEST_LOG> -c <CODE_COVERAGE_REPORT> -l <LANGUAGE_FILE>' . "\n\n";
+        echo "\t" . '-b Base directory path of the project (=absolute root path)' . "\n";
         echo "\t" . '-d Destination directory' . "\n";
         echo "\t" . '-t Template of the test report (has to be a directory containing a `index.tpl.php` which is rendered as `html` file during the generation process) (*optional* no theme definition will use the default theme).' . "\n";
-        echo "\t" . '-u Unit test log (`junit` style)' . "\n";
-        echo "\t" . '-c Code coverage source (`coverage-clover`) (*optional*)' . "\n";
+        echo "\t" . '-u Unit test log (phpunit `junit`)' . "\n";
+        echo "\t" . '-c Code coverage source (phpunit `coverage-clover`) (*optional*)' . "\n";
+        echo "\t" . '-s Code style source (code sniffer `junit`) (*optional*)' . "\n";
+        echo "\t" . '-a Code analysis source (phpstan `coverage-clover`) (*optional*)' . "\n";
         echo "\t" . '-l Language file (`php array`)' . "\n";
     }
 }

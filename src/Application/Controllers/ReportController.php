@@ -6,27 +6,36 @@ use TestReportGenerator\src\Application\Views\TestView;
 
 class ReportController
 {
+    private $basePath     = '';
     private $destination  = '';
     private $testLog      = '';
     private $langArray    = [];
     private $template     = null;
     private $data         = [];
     private $codeCoverage = null;
+    private $codeStyle    = null;
+    private $codeAnalysis = null;
 
     public function __construct(
+        string $basePath,
         string $destination,
         string $testLog,
         string $langArray,
         ?string $template,
         ?string $codeCoverage,
+        ?string $codeStyle,
+        ?string $codeAnalysis,
         ?array $data
     ) {
+        $this->basePath     = $basePath;
         $this->destination  = $destination;
         $this->testLog      = $testLog;
         $this->langArray    = include $langArray;
         $this->template     = $template;
         $this->data         = $data ?? '';
-        $this->codeCoverage = $codeCoverage; // not used so far.
+        $this->codeCoverage = $codeCoverage;
+        $this->codeStyle    = $codeStyle;
+        $this->codeAnalysis = $codeAnalysis;
     }
 
     public function createReport() : void
@@ -49,11 +58,16 @@ class ReportController
         $this->handleTests($testReportData, $domTest, $testView);
         $this->handleSuits($testReportData, $domTest, $testView);
 
-        if (\file_exists($this->codeCoverage)) {
-            $domCoverage = new \DOMDocument();
-            $domCoverage->loadXML(\file_get_contents($this->codeCoverage));
+        if ($this->codeCoverage !== null && \file_exists($this->codeCoverage)) {
+            $this->handleCoverage($testReportData, $testView);
+        }
 
-            $this->handleCoverage($testReportData, $domCoverage, $testView);
+        if ($this->codeStyle !== null && \file_exists($this->codeStyle)) {
+            $this->handleStyle($testReportData, $testView);
+        }
+
+        if ($this->codeAnalysis !== null && \file_exists($this->codeAnalysis)) {
+            $this->handleAnalysis($testReportData, $testView);
         }
 
         $testView->setTestResult($testReportData);
@@ -198,8 +212,11 @@ class ReportController
         }
     }
 
-    private function handleCoverage(array &$testReportData, $dom, $testView) : void
+    private function handleCoverage(array &$testReportData, $testView) : void
     {
+        $dom = new \DOMDocument();
+        $dom->loadXML(\file_get_contents($this->codeCoverage));
+
         $classes = $dom->getElementsByTagName('class');
         foreach ($classes as $class) {
             $metrics   = $class->getElementsByTagName('metrics');
@@ -231,6 +248,68 @@ class ReportController
             $testReportData[$className]['coveredstatements']   = (int) $metrics[0]->getAttribute('coveredstatements');
             $testReportData[$className]['conditionals']        = (int) $metrics[0]->getAttribute('conditionals');
             $testReportData[$className]['coveredconditionals'] = (int) $metrics[0]->getAttribute('coveredconditionals');
+        }
+    }
+
+    private function handleStyle(array &$testReportData, $testView) : void
+    {
+        $dom = new \DOMDocument();
+        $dom->loadXML(\file_get_contents($this->codeStyle));
+
+        $cutoff = \strlen($this->basePath);
+
+        $classes = $dom->getElementsByTagName('testsuite');
+        foreach ($classes as $class) {
+            $className = $class->getAttribute('name');
+            $ending    = \stripos($className, '.');
+            $className = \ltrim(\substr($className, $cutoff, $ending - $cutoff), '/');
+            $className = \str_replace('/', '\\', $className) . 'Test';
+            $exploded  = \explode('\\', $className);
+
+            \array_splice($exploded, 1, 0, 'tests');
+            $className = \implode('\\', $exploded);
+
+            $testView->incrementStyleFiles();
+            $testView->addStyleErrors((int) $class->getAttribute('errors'));
+            $testView->addStyleFailures((int) $class->getAttribute('failures'));
+
+            if (!isset($this->langArray[$className])) {
+                continue;
+            }
+
+            $testReportData[$className]['styleerrors']   = (int) $class->getAttribute('errors');
+            $testReportData[$className]['stylefailures'] = (int) $class->getAttribute('failures');
+        }
+    }
+
+    private function handleAnalysis(array &$testReportData, $testView) : void
+    {
+        $json = \json_decode(\file_get_contents($this->codeAnalysis), true);
+
+        if (!isset($json['files'])) {
+            return;
+        }
+
+        $cutoff = \strlen($this->basePath);
+
+        foreach ($json['files'] as $name => $file) {
+            $className = $name;
+            $ending    = \stripos($className, '.');
+            $className = \ltrim(\substr($className, $cutoff, $ending - $cutoff), '/');
+            $className = \str_replace('/', '\\', $className) . 'Test';
+            $exploded  = \explode('\\', $className);
+
+            \array_splice($exploded, 1, 0, 'tests');
+            $className = \implode('\\', $exploded);
+
+            $testView->incrementStaticFileErrors();
+            $testView->addStaticErrors((int) $file['errors']);
+
+            if (!isset($this->langArray[$className])) {
+                continue;
+            }
+
+            $testReportData[$className]['staticerrors'] = (int) $file['errors'];
         }
     }
 
