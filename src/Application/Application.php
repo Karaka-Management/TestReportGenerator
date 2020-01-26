@@ -6,7 +6,7 @@ use TestReportGenerator\src\Application\Controllers\ReportController;
 
 class Application
 {
-    private ReportController $reportController = null;
+    private ?ReportController $reportController = null;
 
     public function __construct(array $argv)
     {
