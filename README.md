@@ -10,7 +10,7 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 
 ## Requirements
 
-* PHP Version >= 7.0
+* PHP Version >= 7.4
 
 ## Demo
 
