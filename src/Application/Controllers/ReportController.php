@@ -6,15 +6,15 @@ use TestReportGenerator\src\Application\Views\TestView;
 
 class ReportController
 {
-    private $basePath     = '';
-    private $destination  = '';
-    private $testLog      = '';
-    private $langArray    = [];
-    private $template     = null;
-    private $data         = [];
-    private $codeCoverage = null;
-    private $codeStyle    = null;
-    private $codeAnalysis = null;
+    private string $basePath      = '';
+    private string $destination   = '';
+    private string $testLog       = '';
+    private array $langArray      = [];
+    private ?string $template     = null;
+    private array $data           = [];
+    private ?string $codeCoverage = null;
+    private ?string $codeStyle    = null;
+    private ?string $codeAnalysis = null;
 
     public function __construct(
         string $basePath,
@@ -75,7 +75,7 @@ class ReportController
         \file_put_contents($this->destination . '/index.htm', $testView->render());
     }
 
-    private function handleCmdData($testView) : void
+    private function handleCmdData(TestView $testView) : void
     {
         $data = [];
         $length = \count($this->data);
@@ -90,7 +90,7 @@ class ReportController
         $testView->setCmdData($data);
     }
 
-    private function handleLanguage(array &$testReportData, $testView) : void
+    private function handleLanguage(array &$testReportData, TestView $testView) : void
     {
         $lang  = [];
         $order = 0;
@@ -115,7 +115,7 @@ class ReportController
         $testView->setLanguage($lang);
     }
 
-    private function handleTests(array &$testReportData, $dom, $testView) : void
+    private function handleTests(array &$testReportData, \DOMDocument $dom, TestView $testView) : void
     {
         $testcases = $dom->getElementsByTagName('testcase');
         foreach ($testcases as $testcase) {
@@ -171,7 +171,7 @@ class ReportController
         }
     }
 
-    private function handleSuits(array &$testReportData, $dom, $testView) : void
+    private function handleSuits(array &$testReportData, \DOMDocument $dom, TestView $testView) : void
     {
         $testsuites = $dom->getElementsByTagName('testsuite');
         foreach ($testsuites as $testsuite) {
@@ -212,7 +212,7 @@ class ReportController
         }
     }
 
-    private function handleCoverage(array &$testReportData, $testView) : void
+    private function handleCoverage(array &$testReportData, TestView $testView) : void
     {
         $dom = new \DOMDocument();
         $dom->loadXML(\file_get_contents($this->codeCoverage));
@@ -251,7 +251,7 @@ class ReportController
         }
     }
 
-    private function handleStyle(array &$testReportData, $testView) : void
+    private function handleStyle(array &$testReportData, TestView $testView) : void
     {
         $dom = new \DOMDocument();
         $dom->loadXML(\file_get_contents($this->codeStyle));
@@ -282,7 +282,7 @@ class ReportController
         }
     }
 
-    private function handleAnalysis(array &$testReportData, $testView) : void
+    private function handleAnalysis(array &$testReportData, TestView $testView) : void
     {
         $json = \json_decode(\file_get_contents($this->codeAnalysis), true);
 
