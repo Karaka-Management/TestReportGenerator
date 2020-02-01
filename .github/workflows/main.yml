@@ -38,3 +38,32 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git commit -am "Automated formatting changes"
           git push
+  custom:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        php-versions: ['7.4', '8.0']
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    - name: Checkout Build Repository
+      uses: actions/checkout@master
+      with:
+          fetch-depth: 1
+          ref: develop
+          repository: Orange-Management/Build
+          path: Build
+    - name: Setup PHP, with composer and extensions
+      uses: shivammathur/setup-php@master
+      with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, gd, zip, dom, mysql, pgsql, sqlite, imap, bcmath, redis, memcached
+          ini-values: opcache.jit_buffer_size=256M, opcache.jit=1235, pcre.jit=1
+    - name: PHP linting
+      run: find ./ -type f -name '*.php' -print0 | xargs -0 -n1 -P4 php -l -n | (! grep -v "No syntax errors detected" )
+    - name: Php strict
+      run: if [[ $(grep -r -L "declare(strict_types=1);" --include=*.php --exclude={*.tpl.php,*Hooks.php,*Routes.php,*SearchCommands.php} ./) -ne "" ]]; then exit 1; fi
