@@ -4,28 +4,46 @@ namespace TestReportGenerator\src\Application;
 
 \spl_autoload_register('\TestReportGenerator\src\Application\Autoloader::defaultAutoloader');
 
-class Autoloader
+final class Autoloader
 {
+    private static $paths = [
+        __DIR__ . '/../',
+        __DIR__ . '/../../',
+        __DIR__ . '/../../../',
+    ];
+
+    private function __construct()
+    {
+    }
+
+    public static function addPath(string $path) : void
+    {
+        self::$paths[] = $path;
+    }
 
     public static function defaultAutoloader(string $class) : void
     {
-        if (($classNew = self::exists($class)) !== false) {
-            /** @noinspection PhpIncludeInspection */
-            include_once $classNew;
-        } else {
-            throw new \Exception($class);
+        $class = \ltrim($class, '\\');
+        $class = \str_replace(['_', '\\'], '/', $class);
+
+        foreach (self::$paths as $path) {
+            if (\file_exists($file = $path . $class . '.php')) {
+                include $file;
+
+                return;
+            }
         }
     }
 
-    public static function exists(string $class)
+    public static function exists(string $class) : bool
     {
         $class = \ltrim($class, '\\');
-        $class = \str_replace(['_', '\\'], \DIRECTORY_SEPARATOR, $class);
+        $class = \str_replace(['_', '\\'], '/', $class);
 
-        if (\file_exists(__DIR__ . '/../../../' . $class . '.php')) {
-            return __DIR__ . '/../../../' . $class . '.php';
-        } elseif (\file_exists(\dirname(\Phar::running(false)) . '/../../../' . $class . '.php')) {
-            return \dirname(\Phar::running(false)) . '/../../../' . $class . '.php';
+        foreach (self::$paths as $path) {
+            if (\file_exists($path . $class . '.php')) {
+                return true;
+            }
         }
 
         return false;

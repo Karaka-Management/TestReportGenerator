@@ -38,6 +38,37 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git commit -am "Automated formatting changes"
           git push
+  static-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        php-versions: ['7.4']
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    - name: Setup PHP, with composer and extensions
+      uses: shivammathur/setup-php@master
+      with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, gd, zip, dom, mysql, pgsql, sqlite, imap, bcmath, redis, memcached
+          ini-values: opcache.jit_buffer_size=256M, opcache.jit=1235, pcre.jit=1
+    - name: Get Composer Cache Directory
+      id: composer-cache
+      run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+    - name: Cache dependencies
+      uses: actions/cache@v1
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: ${{ runner.os }}-composer-
+    - name: Setup Composer
+      run: composer install
+    - name: phpstan
+      run: vendor/bin/phpstan analyse -a src/Application/Autoloader.php --no-progress -l 7 -c build/phpstan.neon ./
   custom:
     runs-on: ubuntu-latest
     strategy:

@@ -1,0 +1,9 @@
+parameters:
+    fileExtensions:
+        - php
+    reportUnmatchedIgnoredErrors: false
+    excludes_analyse:
+        - *.tpl.php
+        - */vendor/*
+        - *vendor*
+        - */node_modules/*

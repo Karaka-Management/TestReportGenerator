@@ -37,6 +37,8 @@ class TestView
     protected int $staticFileErrors = 0;
     protected int $staticErrors     = 0;
 
+    protected int $errorsSuits = 0;
+
     public function addStaticErrors(int $staticErrors) : void
     {
         $this->staticErrors += $staticErrors;
@@ -192,14 +194,10 @@ class TestView
             $includeData = include $path;
 
             $ob = \ob_get_clean();
-
-            if (\is_array($includeData)) {
-                return $includeData;
-            }
         } catch(\Throwable $e) {
             echo $e->getMessage();
         } finally {
-            return $ob;
+            return (string) $ob;
         }
     }
 }

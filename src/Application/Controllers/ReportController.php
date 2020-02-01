@@ -32,7 +32,7 @@ class ReportController
         $this->testLog      = $testLog;
         $this->langArray    = include $langArray;
         $this->template     = $template;
-        $this->data         = $data ?? '';
+        $this->data         = $data ?? [];
         $this->codeCoverage = $codeCoverage;
         $this->codeStyle    = $codeStyle;
         $this->codeAnalysis = $codeAnalysis;
@@ -49,7 +49,13 @@ class ReportController
         $this->handleCmdData($testView);
 
         $domTest = new \DOMDocument();
-        $domTest->loadXML(\file_get_contents($this->testLog));
+
+        $content = \file_get_contents($this->testLog);
+        if ($content === false) {
+            throw new \Exception('Error while reading file!');
+        }
+
+        $domTest->loadXML($content);
 
         // todo: handle untested methods
         // suggestion: this can be done by defining every suit and test as untested in the testReportData (in handleLanguage) and than reduce the amount for every found test (in handleTests and handleSuits)
@@ -214,8 +220,18 @@ class ReportController
 
     private function handleCoverage(array &$testReportData, TestView $testView) : void
     {
+        if ($this->codeCoverage === null) {
+            return;
+        }
+
         $dom = new \DOMDocument();
-        $dom->loadXML(\file_get_contents($this->codeCoverage));
+
+        $content = \file_get_contents($this->codeCoverage);
+        if ($content === false) {
+            throw new \Exception('Error while reading file!');
+        }
+
+        $dom->loadXML($content);
 
         $classes = $dom->getElementsByTagName('class');
         foreach ($classes as $class) {
@@ -253,8 +269,18 @@ class ReportController
 
     private function handleStyle(array &$testReportData, TestView $testView) : void
     {
+        if ($this->codeStyle === null) {
+            return;
+        }
+
         $dom = new \DOMDocument();
-        $dom->loadXML(\file_get_contents($this->codeStyle));
+
+        $content = \file_get_contents($this->codeStyle);
+        if ($content === false) {
+            throw new \Exception('Error while reading file!');
+        }
+
+        $dom->loadXML($content);
 
         $cutoff = \strlen($this->basePath);
 
@@ -284,7 +310,16 @@ class ReportController
 
     private function handleAnalysis(array &$testReportData, TestView $testView) : void
     {
-        $json = \json_decode(\file_get_contents($this->codeAnalysis), true);
+        if ($this->codeAnalysis === null) {
+            return;
+        }
+
+        $content = \file_get_contents($this->codeAnalysis);
+        if ($content === false) {
+            throw new \Exception('Error while reading file!');
+        }
+
+        $json = \json_decode($content, true);
 
         if (!isset($json['files'])) {
             return;
