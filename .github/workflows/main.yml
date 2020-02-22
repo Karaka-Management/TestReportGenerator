@@ -6,6 +6,7 @@ on: [push]
 jobs:
   autoformat:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'NO_CI')"
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -40,6 +41,7 @@ jobs:
           git push
   static-tests:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'NO_CI')"
     strategy:
       fail-fast: false
       max-parallel: 3
@@ -71,6 +73,7 @@ jobs:
       run: vendor/bin/phpstan analyse -a src/Application/Autoloader.php --no-progress -l 7 -c build/phpstan.neon ./
   custom:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'NO_CI')"
     strategy:
       fail-fast: false
       max-parallel: 3
