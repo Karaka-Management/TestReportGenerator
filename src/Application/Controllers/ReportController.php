@@ -78,7 +78,10 @@ class ReportController
 
         $testView->setTestResult($testReportData);
 
-        \file_put_contents($this->destination . '/index.htm', $testView->render());
+        \file_put_contents(
+            $this->destination . '/index.htm',
+            \preg_replace('/(?s)<pre[^<]*>.*?<\/pre>(*SKIP)(*F)|(\s{2,}|\n|\t)/', ' ',  $testView->render())
+        );
     }
 
     private function handleCmdData(TestView $testView) : void
