@@ -313,6 +313,8 @@ class ReportController
             $testView->addStyleErrors($error = ((int) $class->getAttribute('errors')));
             $testView->addStyleFailures($failure = ((int) $class->getAttribute('failures')));
 
+            $testReportData[$className]['styletests']    = 1;
+            $testReportData[$className]['stylesuccess']  = $error + $failure < 1 ? 1 : 0;
             $testReportData[$className]['styleerrors']   = $error;
             $testReportData[$className]['stylefailures'] = $failure;
         }
@@ -350,10 +352,16 @@ class ReportController
                 continue;
             }
 
-            $testView->incrementStyleFiles();
+            // check if file already checked during php test (phpcs also checks js files)
+            if ($testReportData[$className]['styletests'] ?? 0 < 1) {
+                $testView->incrementStyleFiles();
+            }
+
             $testView->addStyleErrors($error = ((int) $class->getAttribute('errors')));
             $testView->addStyleFailures($failure = ($error < 1 ? 1 : 0));
 
+            $testReportData[$className]['styletests']    = ($testReportData[$className]['styletests'] ?? 0) + 1;
+            $testReportData[$className]['stylesuccess']  = ($testReportData[$className]['stylesuccess'] ?? 0) + ($error + $failure < 1 ? 1 : 0);
             $testReportData[$className]['styleerrors']   = $error;
             $testReportData[$className]['stylefailures'] = $failure;
         }

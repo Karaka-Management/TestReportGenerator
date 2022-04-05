@@ -98,3 +98,7 @@ span.status.status--3 {
 span.status.status--4 {
     background: #ff0000;
 }
+
+#disclaimer {
+    page-break-after: always;
+}

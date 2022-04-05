@@ -43,6 +43,13 @@
                         <li><?= $this->getText(':testing_process_list_5'); ?>
                     </ul>
                     <p><?= $this->getText(':testing_process_desc_2'); ?></p>
+                    <p><?= $this->getText(':testing_process_desc_3'); ?></p>
+                    <ul>
+                        <li><?= $this->getText(':testing_process_rules_1'); ?>
+                        <li><?= $this->getText(':testing_process_rules_2'); ?>
+                        <li><?= $this->getText(':testing_process_rules_3'); ?>
+                        <li><?= $this->getText(':testing_process_rules_4'); ?>
+                    </ul>
                 </section>
                 <section id="testing_summary">
                     <h2><?= $this->getText(':testing_summary'); ?></h2>
@@ -120,9 +127,13 @@
                     <p><?= $this->getText(':testing_summary_desc_2'); ?> <strong><?= $this->assertions; ?></strong></p>
                     <p><?= $this->getText(':testing_summary_desc_3'); ?> <strong><?= $this->duration; ?>s</strong></p>
                 </section>
+                <section id="disclaimer">
+                    <h2><?= $this->getText(':disclaimer'); ?></h2>
+                    <p><?= $this->getText(':disclaimer_desc_1'); ?></p>
+                </section>
                 <section id="tests">
                     <h2><?= $this->getText(':tests'); ?></h2>
-                    <?php $firstTestCase = false; $i = 0; foreach ($this->testresult as $result) : ++$i; ?>
+                    <?php $firstTestCase = false; $i = 0; foreach ($this->testresult as $class => $result) : ++$i; ?>
                         <?php if ($result['type'] === 'testsuite') : $firstTestCase = true; ?>
                             <?php if ($i > 1) : /* close description table! */ ?>
                                 </table>
@@ -185,11 +196,11 @@
                                             <td><?= $result['staticerrors'] ?? 0; ?>
                                         <tr>
                                             <td><?= $this->getText(':code_style'); ?>
-                                            <td>1
-                                            <td><?= ($result['styleerrors'] ?? 0) > 0 || ($result['stylefailures'] ?? 0) > 0 ? 0 : 1; ?>
-                                            <td>0
+                                            <td><?= $result['styletests'] ?? 0; ?>
+                                            <td><?= $result['stylesuccess'] ?? 0; ?>
                                             <td>0
                                             <td><?= $result['stylefailures'] ?? 0; ?>
+                                            <td>0
                                             <td><?= $result['styleerrors'] ?? 0; ?>
                                 </table>
                             </section>
@@ -206,10 +217,6 @@
                         <?php endif; ?>
                     <?php endforeach; ?>
                                 </table>
-                </section>
-                <section id="disclaimer">
-                    <h2><?= $this->getText(':disclaimer'); ?></h2>
-                    <p><?= $this->getText(':disclaimer_desc_1'); ?></p>
                 </section>
             </div>
         </main>
