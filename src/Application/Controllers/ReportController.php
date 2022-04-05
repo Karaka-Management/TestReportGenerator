@@ -14,6 +14,7 @@ class ReportController
     private array $data           = [];
     private ?string $codeCoverage = null;
     private ?string $codeStyle    = null;
+    private ?string $codeStyleJs  = null;
     private ?string $codeAnalysis = null;
 
     public function __construct(
@@ -24,6 +25,7 @@ class ReportController
         ?string $template,
         ?string $codeCoverage,
         ?string $codeStyle,
+        ?string $codeStyleJs,
         ?string $codeAnalysis,
         ?array $data
     ) {
@@ -35,6 +37,7 @@ class ReportController
         $this->data         = $data ?? [];
         $this->codeCoverage = $codeCoverage;
         $this->codeStyle    = $codeStyle;
+        $this->codeStyleJs  = $codeStyleJs;
         $this->codeAnalysis = $codeAnalysis;
     }
 
@@ -48,21 +51,21 @@ class ReportController
 
         $this->handleCmdData($testView);
 
-        $domTest = new \DOMDocument();
+        $phpDomTest = new \DOMDocument();
 
         $content = \file_get_contents($this->testLog);
         if ($content === false) {
             throw new \Exception('Error while reading file!');
         }
 
-        $domTest->loadXML($content);
+        $phpDomTest->loadXML($content);
 
         // todo: handle untested methods
         // suggestion: this can be done by defining every suit and test as untested in the testReportData (in handleLanguage) and than reduce the amount for every found test (in handleTests and handleSuits)
         $testReportData = [];
         $this->handleLanguage($testReportData, $testView);
-        $this->handleTests($testReportData, $domTest, $testView);
-        $this->handleSuits($testReportData, $domTest, $testView);
+        $this->handleTests($testReportData, $phpDomTest, $testView);
+        $this->handleSuits($testReportData, $phpDomTest, $testView);
 
         if ($this->codeCoverage !== null && \file_exists($this->codeCoverage)) {
             $this->handleCoverage($testReportData, $testView);
@@ -70,6 +73,10 @@ class ReportController
 
         if ($this->codeStyle !== null && \file_exists($this->codeStyle)) {
             $this->handleStyle($testReportData, $testView);
+        }
+
+        if ($this->codeStyleJs !== null && \file_exists($this->codeStyleJs)) {
+            $this->handleStyleJs($testReportData, $testView);
         }
 
         if ($this->codeAnalysis !== null && \file_exists($this->codeAnalysis)) {
@@ -298,16 +305,57 @@ class ReportController
             \array_splice($exploded, 1, 0, 'tests');
             $className = \implode('\\', $exploded);
 
+            if (!isset($this->langArray[$className])) {
+                continue;
+            }
+
             $testView->incrementStyleFiles();
-            $testView->addStyleErrors((int) $class->getAttribute('errors'));
-            $testView->addStyleFailures((int) $class->getAttribute('failures'));
+            $testView->addStyleErrors($error = ((int) $class->getAttribute('errors')));
+            $testView->addStyleFailures($failure = ((int) $class->getAttribute('failures')));
+
+            $testReportData[$className]['styleerrors']   = $error;
+            $testReportData[$className]['stylefailures'] = $failure;
+        }
+    }
+
+    private function handleStyleJs(array &$testReportData, TestView $testView) : void
+    {
+        if ($this->codeStyleJs === null) {
+            return;
+        }
+
+        $dom = new \DOMDocument();
+
+        $content = \file_get_contents($this->codeStyleJs);
+        if ($content === false) {
+            throw new \Exception('Error while reading file!');
+        }
+
+        $dom->loadXML($content);
+
+        $cutoff = \strlen($this->basePath);
+
+        $classes = $dom->getElementsByTagName('testsuite');
+        foreach ($classes as $class) {
+            $className = $class->getAttribute('name');
+            $ending    = \stripos($className, '.');
+            $className = \ltrim(\substr($className, $cutoff, $ending - $cutoff), '/');
+            $className = \str_replace('/', '\\', $className) . 'Test';
+            $exploded  = \explode('\\', $className);
+
+            \array_splice($exploded, 1, 0, 'tests');
+            $className = \implode('\\', $exploded);
 
             if (!isset($this->langArray[$className])) {
                 continue;
             }
 
-            $testReportData[$className]['styleerrors']   = (int) $class->getAttribute('errors');
-            $testReportData[$className]['stylefailures'] = (int) $class->getAttribute('failures');
+            $testView->incrementStyleFiles();
+            $testView->addStyleErrors($error = ((int) $class->getAttribute('errors')));
+            $testView->addStyleFailures($failure = ($error < 1 ? 1 : 0));
+
+            $testReportData[$className]['styleerrors']   = $error;
+            $testReportData[$className]['stylefailures'] = $failure;
         }
     }
 

@@ -72,6 +72,7 @@ class Application
         $template     = ($key = \array_search('-t', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
         $codeCoverage = ($key = \array_search('-c', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
         $codeStyle    = ($key = \array_search('-s', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
+        $codeStyleJs  = ($key = \array_search('-sj', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
         $codeAnalysis = ($key = \array_search('-a', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
 
         if ($template !== null && !\file_exists($template)) {
@@ -84,7 +85,7 @@ class Application
             return;
         }
 
-        $this->reportController = new ReportController($basePath, $destination, $testLog, $langArray, $template, $codeCoverage, $codeStyle, $codeAnalysis, $argv);
+        $this->reportController = new ReportController($basePath, $destination, $testLog, $langArray, $template, $codeCoverage, $codeStyle, $codeStyleJs, $codeAnalysis, $argv);
         $this->reportController->createReport();
     }
 
@@ -97,6 +98,7 @@ class Application
         echo "\t" , '-u Unit test log (phpunit `junit`)' , "\n";
         echo "\t" , '-c Code coverage source (phpunit `coverage-clover`) (*optional*)' , "\n";
         echo "\t" , '-s Code style source (code sniffer `junit`) (*optional*)' , "\n";
+        echo "\t" , '-sj Code style source (eslint `junit`) (*optional*)' , "\n";
         echo "\t" , '-a Code analysis source (phpstan `coverage-clover`) (*optional*)' , "\n";
         echo "\t" , '-l Language file (`php array`)' , "\n";
     }

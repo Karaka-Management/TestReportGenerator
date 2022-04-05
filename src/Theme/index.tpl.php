@@ -143,16 +143,16 @@
                                     <tbody>
                                         <tr>
                                             <th><?= $this->getText(':methods'); ?>
-                                            <td><?= $result['methods']; ?>
-                                            <td><?= $result['coveredmethods']; ?>
-                                            <td><?= $result['methods'] - $result['coveredmethods']; ?>
-                                            <td><?= \number_format((float) (100 * ($result['methods'] !== 0 ? $result['coveredmethods'] / $result['methods'] : 1)), 1); ?>%
+                                            <td><?= $result['methods'] ?? 0; ?>
+                                            <td><?= $result['coveredmethods'] ?? 0; ?>
+                                            <td><?= $result['methods'] - $result['coveredmethods'] ?? 0; ?>
+                                            <td><?= \number_format((float) (100 * (($result['methods'] ?? 0) !== 0 ? $result['coveredmethods'] / $result['methods'] : 1)), 1); ?>%
                                         <tr>
                                             <th><?= $this->getText(':statements'); ?>
-                                            <td><?= $result['statements']; ?>
-                                            <td><?= $result['coveredstatements']; ?>
+                                            <td><?= $result['statements'] ?? 0; ?>
+                                            <td><?= $result['coveredstatements'] ?? 0; ?>
                                             <td><?= $result['statements'] - $result['coveredstatements']; ?>
-                                            <td><?= \number_format((float) (100 * ($result['statements'] !== 0 ? $result['coveredstatements'] / $result['statements'] : 1)), 1); ?>%
+                                            <td><?= \number_format((float) (100 * (($result['statements'] ?? 0) !== 0 ? $result['coveredstatements'] / $result['statements'] : 1)), 1); ?>%
                                 </table>
 
                                 <h4><?= $this->getText(':testing_summary_tests'); ?></h4>
@@ -169,12 +169,12 @@
                                     <tbody>
                                         <tr>
                                             <td><?= $this->getText(':tests'); ?>
-                                            <td><?= $result['tests']; ?>
+                                            <td><?= $result['tests'] ?? 0; ?>
                                             <td><?= $result['tests'] - $result['skips'] - $result['failures'] - $result['errors']; ?>
-                                            <td><?= $result['skips']; ?>
-                                            <td><?= $result['warnings']; ?>
-                                            <td><?= $result['failures']; ?>
-                                            <td><?= $result['errors']; ?>
+                                            <td><?= $result['skips'] ?? 0; ?>
+                                            <td><?= $result['warnings'] ?? 0; ?>
+                                            <td><?= $result['failures'] ?? 0; ?>
+                                            <td><?= $result['errors'] ?? 0; ?>
                                         <tr>
                                             <td><?= $this->getText(':static_tests'); ?>
                                             <td>1
@@ -186,7 +186,7 @@
                                         <tr>
                                             <td><?= $this->getText(':code_style'); ?>
                                             <td>1
-                                            <td><?= $result['styleerrors'] > 0 || $result['stylefailures'] > 0 ? 0 : 1; ?>
+                                            <td><?= ($result['styleerrors'] ?? 0) > 0 || ($result['stylefailures'] ?? 0) > 0 ? 0 : 1; ?>
                                             <td>0
                                             <td>0
                                             <td><?= $result['stylefailures'] ?? 0; ?>
@@ -201,7 +201,7 @@
                             <?php endif; ?>
                             <tr>
                                 <td><span class="status status-<?= $result['status']; ?>"><?= $this->getText(':status:' . $result['status']); ?></span>
-                                <td style="width: 100%;"><?= $result['info']['description']; ?>
+                                <td style="width: 100%;"><?= $result['info']['description'] ?? ''; ?>
                                 <td><?= $result['time']; ?>s
                         <?php endif; ?>
                     <?php endforeach; ?>

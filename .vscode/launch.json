@@ -5,10 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Listen for XDebug",
+            "name": "XDebug",
             "type": "php",
             "request": "launch",
-            "port": 9000
+            "port": 9003,
+            "xdebugSettings": {
+                "max_data": -1,
+                "max_children": 999,
+            }
         },
         {
             "name": "Launch currently open script",
