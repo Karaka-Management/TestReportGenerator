@@ -10,11 +10,11 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 
 ## Requirements
 
-* PHP Version >= 7.4
+* PHP Version >= 8.0
 
 ## Demo
 
-http://orange-management.org/Inspection/Test/ReportExternal/index.htm
+http://karaka.app/Inspection/Test/ReportExternal/index.htm
 
 ## Usage
 
