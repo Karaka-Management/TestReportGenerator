@@ -46,7 +46,7 @@ Note: Paths need to be absolute.
 
 #### Example
 
-```
+```sh
 php TestReportGenerator/src/index.php \
     -b /home/oms \
     -l /home/oms/Build/Config/reportLang.php \
