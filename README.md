@@ -38,8 +38,26 @@ php TestReportGenerator/src/index.php -d <DESTINATION_PATH> -t <TEMPLATE> -u <JU
 * `-u` Unit test log (`junit` style)
 * `-c` Code coverage source (`coverage-clover`) (*optional*)
 * `-l` Language file (`php array`)
+* `-a` Phpstan report (`json` format)
+* `-s` PhpCs code style report (`junit`)
+* `-sj`Eslint code style report (`junit`)
 
 Note: Paths need to be absolute.
+
+#### Example
+
+```
+php TestReportGenerator/src/index.php \
+    -b /home/oms \
+    -l /home/oms/Build/Config/reportLang.php \
+    -c /home/oms/tests/coverage.xml \
+    -s /home/oms/Build/test/junit_phpcs.xml \
+    -sj /home/oms/Build/test/junit_eslint.xml \
+    -a /home/oms/Build/test/phpstan.json \
+    -u /home/oms/Build/test/junit_php.xml \
+    -d /home/oms/Build/test/ReportExternal \
+    --version 1.0.0
+```
 
 ### Custom Arguments
 
