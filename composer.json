@@ -1,5 +1,5 @@
 {
-    "name": "Orange-Management/TestReportGenerator",
+    "name": "karaka-management/testreportgenerator",
     "description": "PHP Test Report Generator for Orange Management.",
     "authors": [
         {
@@ -10,7 +10,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Orange-Management/TestReportGenerator.git"
+            "url": "https://github.com/Karaka-Management/TestReportGenerator.git"
         }
     ],
     "require-dev": {
