@@ -61,7 +61,7 @@ php TestReportGenerator/src/index.php \
 
 ### Custom Arguments
 
-If you need custom arguments which is used by the template you can use `--<definition> <value>` in order to pass these values.
+If you need custom arguments which are used by the template you can use `--<definition> <value>` in order to pass these values.
 
 The default template for example allows to pass a version number via `--version 1.0.0` which is then accessed in the template by using `$this->cmdData['version]`.
 
