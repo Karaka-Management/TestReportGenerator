@@ -16,17 +16,48 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 
 http://karaka.app/Inspection/Test/ReportExternal/index.htm
 
+## Installation
+
+* Option 1: Just download the repository and use it as is.
+* Option 2: Download the phar `testreportgenerator.phar` from the most recent release (**recommended**)
+* Option 3: Use your composer.json file by adding the code below and then run `composer update`
+
+### Composer file
+
+```json
+{
+  "name":  "karaka-management/testreportgenerator",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Karaka-Management/TestReportGenerator.git"
+    }
+  ],
+  "require": {
+    "karaka-management/testreportgenerator": "dev-master"
+  }
+}
+```
+
 ## Usage
 
 A list of arguments can be found with:
 
-```
+```sh
+// Option 1: repository
 php TestReportGenerator/src/index.php -h
+
+// Option 2: phar
+php testreportgenerator.phar -h
+
+
+// Option 3: Composer
+./vendor/bin/testreportgenerator -h
 ```
 
-The default usage would be:
+The default usage would be as follows:
 
-```
+```sh
 php TestReportGenerator/src/index.php -d <DESTINATION_PATH> -t <TEMPLATE> -u <JUNIT_UNIT_TEST_LOG> -c <CODE_COVERAGE_REPORT> -l <LANGUAGE_FILE>
 ```
 
@@ -43,6 +74,8 @@ php TestReportGenerator/src/index.php -d <DESTINATION_PATH> -t <TEMPLATE> -u <JU
 * `-sj`Eslint code style report (`junit`)
 
 Note: Paths need to be absolute.
+
+> If you use the phar or composer installation method just replace `php TestReportGenerator/src/index.php` accordingly.
 
 #### Example
 
