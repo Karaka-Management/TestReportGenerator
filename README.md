@@ -73,7 +73,7 @@ php TestReportGenerator/src/index.php -d <DESTINATION_PATH> -t <TEMPLATE> -u <JU
 * `-s` PhpCs code style report (`junit`)
 * `-sj`Eslint code style report (`junit`)
 
-Note: Paths need to be absolute.
+Note: **Paths need to be absolute!**
 
 > If you use the phar or composer installation method just replace `php TestReportGenerator/src/index.php` accordingly.
 
