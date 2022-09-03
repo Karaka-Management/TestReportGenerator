@@ -61,6 +61,8 @@ The default usage would be as follows:
 php TestReportGenerator/src/index.php -d <DESTINATION_PATH> -t <TEMPLATE> -u <JUNIT_UNIT_TEST_LOG> -c <CODE_COVERAGE_REPORT> -l <LANGUAGE_FILE>
 ```
 
+Afterwards navigate to the destination path in your browser i.e. and if you want to turn this report into a PDF simply use your browser to *print* the report as PDF.
+
 ### Arguments
 
 * `-h` Show help
