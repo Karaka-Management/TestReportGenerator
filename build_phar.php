@@ -8,5 +8,5 @@ if ($path === false) {
     return;
 }
 
-$phar->buildFromDirectory($path, '/((TestReportGenerator)+(\\/|\\\)+(.*?\\.)(php|css|png|js|ico|txt))$/');
+$phar->buildFromDirectory($path, '/((TestReportGenerator)+(\\/|\\\)+(.*?\\.)(php|css|png|js))$/');
 $phar->stopBuffering();
