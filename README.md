@@ -14,7 +14,7 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 
 ## Demo
 
-http://karaka.app/Inspection/Test/ReportExternal/index.htm
+https://raw.githubusercontent.com/Karaka-Management/TestReportGenerator/master/tests/TestReport.pdf
 
 ## Installation
 
