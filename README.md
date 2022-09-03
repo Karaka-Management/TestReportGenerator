@@ -100,7 +100,7 @@ If you need custom arguments which are used by the template you can use `--<defi
 
 The default template for example allows to pass a version number via `--version 1.0.0` which is then accessed in the template by using `$this->cmdData['version]`.
 
-### Custom template
+## Custom template
 
 For creating your own report template and theme please check out the default theme as a reference point (https://github.com/Karaka-Management/TestReportGenerator/tree/master/src/Theme).
 
