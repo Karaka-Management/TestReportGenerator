@@ -100,6 +100,10 @@ If you need custom arguments which are used by the template you can use `--<defi
 
 The default template for example allows to pass a version number via `--version 1.0.0` which is then accessed in the template by using `$this->cmdData['version]`.
 
+### Custom template
+
+For creating your own report template and theme please check out the default theme as a reference point (https://github.com/Karaka-Management/TestReportGenerator/tree/master/src/Theme).
+
 ## Language file structure
 
 The language file is an array of the following form:
@@ -124,16 +128,6 @@ By prefixing a key with `:` the generator will consider these values as localiza
 ```php
 $this->getText(':yourLanguageId');
 ```
-
-### Report Parameters for Tests
-
-If you want to show additional information in your test report per test you can provide these information as additional key-value pairs. In the template you can access them via:
-
-```php
-$result['info']['key_name'];
-```
-
-Check out the default template for an example `$result['info']['description'];`
 
 ## Preview
 
