@@ -1,7 +1,5 @@
 <p align="center"><img src="https://raw.githubusercontent.com/Karaka-Management/Assets/master/art/logo.png" width="256" alt="Logo"></p>
 
-# What is the TestReportGenerator
-
 The Test Report Generator is a php script which creates a report from PHPUnit tests and other testing tools. Such a report can be helpful for software releases and software audits to show what got tested and what the result of such tests were. The generated output is html and css and can be styled with custom themes as desired. The report is ideal to ship with software as proof for customers that the software (i.e. updates) have been tested and perform as expected.
 
 The advantage compared to other alternatives like `@testdox` from PHPUnit are:
