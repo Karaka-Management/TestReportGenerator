@@ -8,7 +8,7 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 * Customize which test results should be included in the report
 * Customizable report template
 
-## Requirements
+## Dependencies
 
 * PHP Version >= 8.0
 
