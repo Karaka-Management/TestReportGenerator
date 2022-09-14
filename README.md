@@ -11,6 +11,12 @@ The advantage compared to other alternatives like `@testdox` from PHPUnit are:
 ## Dependencies
 
 * PHP Version >= 8.0
+* Test results from PHPUnit in junit format
+* Code coverage report in coverage-clover format (optional)
+* PHPStan report in json format (optional)
+* PHPCS report in junit format (optional)
+* ESLint report in junti format (optional)
+
 
 ## Demo
 
@@ -129,6 +135,12 @@ By prefixing a key with `:` the generator will consider these values as localiza
 $this->getText(':yourLanguageId');
 ```
 
-## Preview
+## Images
 
-![sample](https://raw.githubusercontent.com/Orange-Management/TestReportGenerator/master/img/sample.jpg)
+![Sample](https://raw.githubusercontent.com/Orange-Management/TestReportGenerator/master/img/sample.jpg)
+
+## Legal
+
+* [Terms of Service](https://jingga.app/en/terms)
+* [License](https://github.com/Karaka-Management/TestReportGenerator/blob/master/LICENSE.txt)
+
