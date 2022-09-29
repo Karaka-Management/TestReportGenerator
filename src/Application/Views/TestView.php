@@ -179,7 +179,7 @@ class TestView
         return $this->lang[$text] ?? 'ERROR';
     }
 
-    public function render(...$data) : string
+    public function render(mixed ...$data) : string
     {
         $ob   = '';
         $path = $this->template . '.tpl.php';
