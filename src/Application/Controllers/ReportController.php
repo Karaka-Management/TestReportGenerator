@@ -437,9 +437,9 @@ class ReportController
             throw new \Exception('Error while reading file!');
         }
 
-        /** @var array<string, array<string, int|string>> $json */
+        /** @var array<string, array<string, array<string, int|string>>> $json */
         $json = \json_decode($content, true);
-        if ($json === false || !isset($json['files'])) {
+        if (!\is_array($json) || !isset($json['files'])) {
             return;
         }
 
