@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace TestReportGenerator\src\Application;
 
@@ -8,6 +9,9 @@ class Application
 {
     private ?ReportController $reportController = null;
 
+    /**
+     * @param string[] $argv
+     */
     public function __construct(array $argv)
     {
         $this->setupHandlers();

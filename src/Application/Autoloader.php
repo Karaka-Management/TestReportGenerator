@@ -6,6 +6,9 @@ namespace TestReportGenerator\src\Application;
 
 final class Autoloader
 {
+    /**
+     * @var string[]
+     */
     private static $paths = [
         __DIR__ . '/../',
         __DIR__ . '/../../',

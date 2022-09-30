@@ -3,13 +3,22 @@ namespace TestReportGenerator\src\Application\Views;
 
 class TestView
 {
-    protected string $template  = '';
+    protected string $template = '';
 
+    /**
+     * @var array<string, array>
+     */
     protected array $testresult = [];
 
-    protected array $lang       = [];
+    /**
+     * @var array<string, string>
+     */
+    protected array $lang = [];
 
-    protected array $cmdData    = [];
+    /**
+     * @var array<string, string>
+     */
+    protected array $cmdData = [];
 
     protected float $duration   = 0.0;
 
@@ -174,11 +183,17 @@ class TestView
         $this->duration += $duration;
     }
 
+    /**
+     * @param array<string, string> $language Localization data
+     */
     public function setLanguage(array $language) : void
     {
         $this->lang = $language;
     }
 
+    /**
+     * @param array<string, string> $data Key => value pairs from argv
+     */
     public function setCmdData(array $data) : void
     {
         $this->cmdData = $data;
@@ -189,11 +204,15 @@ class TestView
         $this->template = $template;
     }
 
+    /**
+     * @param array<string, array> $testresult Result data from tests
+     */
     public function setTestResult(array $testresult) : void
     {
         $this->testresult = $testresult;
     }
 
+    // @phpstan-ignore-next-line
     private function getText(string $text) : string
     {
         return $this->lang[$text] ?? 'ERROR';

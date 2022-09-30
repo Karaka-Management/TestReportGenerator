@@ -12,10 +12,16 @@ class ReportController
 
     private string $testLog       = '';
 
+    /**
+     * @var array<string, string>
+     */
     private array $langArray      = [];
 
     private ?string $template     = null;
 
+    /**
+     * @var string[]
+     */
     private array $data           = [];
 
     private ?string $codeCoverage = null;
@@ -26,6 +32,18 @@ class ReportController
 
     private ?string $codeAnalysis = null;
 
+    /**
+     * @param string                $basePath     Base app path
+     * @param string                $destination  Output path
+     * @param string                $testLog      Path to test logs
+     * @param array<string, string> $langArray    Localization
+     * @param null|string           $template     Report template
+     * @param null|string           $codeCoverage Path to code coverage
+     * @param null|string           $codeStyle    Path to code style
+     * @param null|string           $codeStyleJs  Path to js code style
+     * @param null|string           $codeAnalysis Path to code analysis
+     * @para null|string[]          $data         Argv data
+     */
     public function __construct(
         string $basePath,
         string $destination,
@@ -115,6 +133,10 @@ class ReportController
         $testView->setCmdData($data);
     }
 
+    /**
+     * @param array<string, array> $testReportData Report data
+     * @param TestView             $testView       View
+     */
     private function handleLanguage(array &$testReportData, TestView $testView) : void
     {
         $lang  = [];
@@ -140,6 +162,11 @@ class ReportController
         $testView->setLanguage($lang);
     }
 
+    /**
+     * @param array<string, array> $testReportData Report data
+     * @param \DOMDocument         $dom            Xml dom
+     * @param TestView             $testView       View
+     */
     private function handleTests(array &$testReportData, \DOMDocument $dom, TestView $testView) : void
     {
         $testcases = $dom->getElementsByTagName('testcase');
@@ -196,6 +223,11 @@ class ReportController
         }
     }
 
+    /**
+     * @param array<string, array> $testReportData Report data
+     * @param \DOMDocument         $dom            Xml dom
+     * @param TestView             $testView       View
+     */
     private function handleSuits(array &$testReportData, \DOMDocument $dom, TestView $testView) : void
     {
         $testsuites = $dom->getElementsByTagName('testsuite');
@@ -237,6 +269,10 @@ class ReportController
         }
     }
 
+    /**
+     * @param array<string, array> $testReportData Report data
+     * @param TestView             $testView       View
+     */
     private function handleCoverage(array &$testReportData, TestView $testView) : void
     {
         if ($this->codeCoverage === null) {
@@ -286,6 +322,10 @@ class ReportController
         }
     }
 
+    /**
+     * @param array<string, array> $testReportData Report data
+     * @param TestView             $testView       View
+     */
     private function handleStyle(array &$testReportData, TestView $testView) : void
     {
         if ($this->codeStyle === null) {
@@ -329,6 +369,10 @@ class ReportController
         }
     }
 
+    /**
+     * @param array<string, array> $testReportData Report data
+     * @param TestView             $testView       View
+     */
     private function handleStyleJs(array &$testReportData, TestView $testView) : void
     {
         if ($this->codeStyleJs === null) {
@@ -376,6 +420,10 @@ class ReportController
         }
     }
 
+    /**
+     * @param array<string, array> $testReportData Report data
+     * @param TestView             $testView       View
+     */
     private function handleAnalysis(array &$testReportData, TestView $testView) : void
     {
         if ($this->codeAnalysis === null) {
