@@ -133,7 +133,7 @@
                 </section>
                 <section id="tests">
                     <h2><?= $this->getText(':tests'); ?></h2>
-                    <?php $firstTestCase = false; $i = 0; foreach ($this->testresult as $class => $result) : ++$i; ?>
+                    <?php $firstTestCase                                            = false; $i = 0; foreach ($this->testresult as $class => $result) : ++$i; ?>
                         <?php if ($result['type'] === 'testsuite') : $firstTestCase = true; ?>
                             <?php if ($i > 1) : /* close description table! */ ?>
                                 </table>
