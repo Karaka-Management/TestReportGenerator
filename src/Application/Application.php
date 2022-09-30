@@ -10,7 +10,7 @@ class Application
     private ?ReportController $reportController = null;
 
     /**
-     * @param string[] $argv
+     * @param string[] $argv Application command line
      */
     public function __construct(array $argv)
     {
@@ -71,6 +71,13 @@ class Application
         \mb_internal_encoding('UTF-8');
     }
 
+    /**
+     * @param string   $basePath    Base path for app
+     * @param string   $destination Output path
+     * @param string   $testLog     Test log path
+     * @param string   $langArray   Language file path
+     * @param string[] $argv        Application command line
+     */
     private function createReport(string $basePath, string $destination, string $testLog, string $langArray, array $argv) : void
     {
         $template     = ($key = \array_search('-t', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');

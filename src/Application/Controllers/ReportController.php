@@ -42,7 +42,7 @@ class ReportController
      * @param null|string           $codeStyle    Path to code style
      * @param null|string           $codeStyleJs  Path to js code style
      * @param null|string           $codeAnalysis Path to code analysis
-     * @para null|string[]          $data         Argv data
+     * @param null|string[]         $data         Argv data
      */
     public function __construct(
         string $basePath,
@@ -408,7 +408,7 @@ class ReportController
             }
 
             // check if file already checked during php test (phpcs also checks js files)
-            if ($testReportData[$className]['styletests'] ?? 0 < 1) {
+            if (($testReportData[$className]['styletests'] ?? 0) < 1) {
                 $testView->incrementStyleFiles();
             }
 
