@@ -33,16 +33,16 @@ class ReportController
     private ?string $codeAnalysis = null;
 
     /**
-     * @param string                $basePath     Base app path
-     * @param string                $destination  Output path
-     * @param string                $testLog      Path to test logs
-     * @param array<string, string> $langArray    Localization
-     * @param null|string           $template     Report template
-     * @param null|string           $codeCoverage Path to code coverage
-     * @param null|string           $codeStyle    Path to code style
-     * @param null|string           $codeStyleJs  Path to js code style
-     * @param null|string           $codeAnalysis Path to code analysis
-     * @param null|string[]         $data         Argv data
+     * @param string        $basePath     Base app path
+     * @param string        $destination  Output path
+     * @param string        $testLog      Path to test logs
+     * @param string        $langArray    Localization file path
+     * @param null|string   $template     Report template
+     * @param null|string   $codeCoverage Path to code coverage
+     * @param null|string   $codeStyle    Path to code style
+     * @param null|string   $codeStyleJs  Path to js code style
+     * @param null|string   $codeAnalysis Path to code analysis
+     * @param null|string[] $data         Argv data
      */
     public function __construct(
         string $basePath,
