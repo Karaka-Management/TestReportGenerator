@@ -70,7 +70,7 @@ jobs:
     - name: Setup Composer
       run: composer install
     - name: phpstan
-      run: vendor/bin/phpstan analyse -a src/Application/Autoloader.php --no-progress -l 7 -c build/phpstan.neon ./
+      run: vendor/bin/phpstan analyse -a src/Application/Autoloader.php --no-progress -l 9 -c build/phpstan.neon ./
   custom:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'NO_CI')"
