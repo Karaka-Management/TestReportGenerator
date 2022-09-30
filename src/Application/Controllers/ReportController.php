@@ -437,6 +437,7 @@ class ReportController
             throw new \Exception('Error while reading file!');
         }
 
+        /** @var array<string, array<string, int|string>> $json */
         $json = \json_decode($content, true);
         if ($json === false || !isset($json['files'])) {
             return;
@@ -444,7 +445,6 @@ class ReportController
 
         $cutoff = \strlen($this->basePath);
 
-        /** @var array<string, array<string, int|string>> $json */
         foreach ($json['files'] as $name => $file) {
             $className = $name;
             $ending    = \stripos($className, '.');
@@ -461,13 +461,13 @@ class ReportController
             $className = \implode('\\', $exploded);
 
             $testView->incrementStaticFileErrors();
-            $testView->addStaticErrors((int) $file['errors']);
+            $testView->addStaticErrors((int) ($file['errors'] ?? 0));
 
             if (!isset($this->langArray[$className])) {
                 continue;
             }
 
-            $testReportData[$className]['staticerrors'] = (int) $file['errors'];
+            $testReportData[$className]['staticerrors'] = (int) ($file['errors'] ?? 0);
         }
     }
 
