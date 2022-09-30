@@ -438,16 +438,21 @@ class ReportController
         }
 
         $json = \json_decode($content, true);
-
-        if (!isset($json['files'])) {
+        if ($json === false || !isset($json['files'])) {
             return;
         }
 
         $cutoff = \strlen($this->basePath);
 
+        /** @var array<string, array<string, int|string>> $json */
         foreach ($json['files'] as $name => $file) {
             $className = $name;
             $ending    = \stripos($className, '.');
+
+            if ($ending === false) {
+                continue;
+            }
+
             $className = \ltrim(\substr($className, $cutoff, $ending - $cutoff), '/');
             $className = \str_replace('/', '\\', $className) . 'Test';
             $exploded  = \explode('\\', $className);
