@@ -137,7 +137,7 @@ $this->getText(':yourLanguageId');
 
 ## Images
 
-![Sample](https://raw.githubusercontent.com/Orange-Management/TestReportGenerator/master/img/sample.jpg)
+![Sample](https://raw.githubusercontent.com/Karaka-Management/TestReportGenerator/master/img/sample.jpg)
 
 ## Legal
 
