@@ -89,6 +89,8 @@ class ReportController
 
         // todo: handle untested methods
         // suggestion: this can be done by defining every suit and test as untested in the testReportData (in handleLanguage) and than reduce the amount for every found test (in handleTests and handleSuits)
+
+        /** @var array<string, array<string, int|string>> $testReportData */
         $testReportData = [];
         $this->handleLanguage($testReportData, $testView);
         $this->handleTests($testReportData, $phpDomTest, $testView);
@@ -134,8 +136,8 @@ class ReportController
     }
 
     /**
-     * @param array<string, array> $testReportData Report data
-     * @param TestView             $testView       View
+     * @param array<string, array<string, int|string>> $testReportData Report data
+     * @param TestView                                 $testView       View
      */
     private function handleLanguage(array &$testReportData, TestView $testView) : void
     {
@@ -163,9 +165,9 @@ class ReportController
     }
 
     /**
-     * @param array<string, array> $testReportData Report data
-     * @param \DOMDocument         $dom            Xml dom
-     * @param TestView             $testView       View
+     * @param array<string, array<string, int|string>> $testReportData Report data
+     * @param \DOMDocument                             $dom            Xml dom
+     * @param TestView                                 $testView       View
      */
     private function handleTests(array &$testReportData, \DOMDocument $dom, TestView $testView) : void
     {
@@ -224,9 +226,9 @@ class ReportController
     }
 
     /**
-     * @param array<string, array> $testReportData Report data
-     * @param \DOMDocument         $dom            Xml dom
-     * @param TestView             $testView       View
+     * @param array<string, array<string, int|string>> $testReportData Report data
+     * @param \DOMDocument                             $dom            Xml dom
+     * @param TestView                                 $testView       View
      */
     private function handleSuits(array &$testReportData, \DOMDocument $dom, TestView $testView) : void
     {
@@ -270,8 +272,8 @@ class ReportController
     }
 
     /**
-     * @param array<string, array> $testReportData Report data
-     * @param TestView             $testView       View
+     * @param array<string, array<string, int|string>> $testReportData Report data
+     * @param TestView                                 $testView       View
      */
     private function handleCoverage(array &$testReportData, TestView $testView) : void
     {
@@ -323,8 +325,8 @@ class ReportController
     }
 
     /**
-     * @param array<string, array> $testReportData Report data
-     * @param TestView             $testView       View
+     * @param array<string, array<string, int|string>> $testReportData Report data
+     * @param TestView                                 $testView       View
      */
     private function handleStyle(array &$testReportData, TestView $testView) : void
     {
@@ -370,8 +372,8 @@ class ReportController
     }
 
     /**
-     * @param array<string, array> $testReportData Report data
-     * @param TestView             $testView       View
+     * @param array<string, array<string, int|string>> $testReportData Report data
+     * @param TestView                                 $testView       View
      */
     private function handleStyleJs(array &$testReportData, TestView $testView) : void
     {
@@ -421,8 +423,8 @@ class ReportController
     }
 
     /**
-     * @param array<string, array> $testReportData Report data
-     * @param TestView             $testView       View
+     * @param array<string, array<string, int|string>> $testReportData Report data
+     * @param TestView                                 $testView       View
      */
     private function handleAnalysis(array &$testReportData, TestView $testView) : void
     {

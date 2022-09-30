@@ -6,7 +6,7 @@ class TestView
     protected string $template = '';
 
     /**
-     * @var array<string, array>
+     * @var array<string, array<string, int|string>>
      */
     protected array $testresult = [];
 
@@ -205,7 +205,7 @@ class TestView
     }
 
     /**
-     * @param array<string, array> $testresult Result data from tests
+     * @param array<string, array<string, int|string>> $testresult Result data from tests
      */
     public function setTestResult(array $testresult) : void
     {
