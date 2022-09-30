@@ -7,14 +7,23 @@ use TestReportGenerator\src\Application\Views\TestView;
 class ReportController
 {
     private string $basePath      = '';
+
     private string $destination   = '';
+
     private string $testLog       = '';
+
     private array $langArray      = [];
+
     private ?string $template     = null;
+
     private array $data           = [];
+
     private ?string $codeCoverage = null;
+
     private ?string $codeStyle    = null;
+
     private ?string $codeStyleJs  = null;
+
     private ?string $codeAnalysis = null;
 
     public function __construct(
@@ -93,12 +102,12 @@ class ReportController
 
     private function handleCmdData(TestView $testView) : void
     {
-        $data = [];
+        $data   = [];
         $length = \count($this->data);
 
         for ($i = 0; $i < $length; ++$i) {
             if (\substr($this->data[$i], 0, 2) === '--') {
-                $data[\substr($this->data[$i], 2)] = $this->data[$i+1];
+                $data[\substr($this->data[$i], 2)] = $this->data[$i + 1];
                 ++$i;
             }
         }
@@ -429,7 +438,7 @@ class ReportController
         }
 
         if (!\is_dir($dest)) {
-            \mkdir ($dest, 0777);
+            \mkdir($dest, 0777);
         }
 
         $dir = \dir($src);
