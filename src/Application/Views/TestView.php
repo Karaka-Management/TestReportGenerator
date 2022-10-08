@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
+
 namespace TestReportGenerator\src\Application\Views;
 
 class TestView
@@ -20,51 +22,51 @@ class TestView
      */
     protected array $cmdData = [];
 
-    protected float $duration   = 0.0;
+    protected float $duration = 0.0;
 
-    protected int $errors   = 0;
+    protected int $errors = 0;
 
     protected int $warnings = 0;
 
-    protected int $skipps   = 0;
+    protected int $skipps = 0;
 
     protected int $failures = 0;
 
     protected int $warningsSuits = 0;
 
-    protected int $skippsSuits   = 0;
+    protected int $skippsSuits = 0;
 
     protected int $failuresSuits = 0;
 
-    protected int $testsSuits    = 0;
+    protected int $testsSuits = 0;
 
-    protected int $tests      = 0;
+    protected int $tests = 0;
 
-    protected int $suits      = 0;
+    protected int $suits = 0;
 
     protected int $assertions = 0;
 
-    protected int $methods             = 0;
+    protected int $methods = 0;
 
-    protected int $methodsCovered      = 0;
+    protected int $methodsCovered = 0;
 
-    protected int $statements          = 0;
+    protected int $statements = 0;
 
-    protected int $statementsCovered   = 0;
+    protected int $statementsCovered = 0;
 
-    protected int $conditionals        = 0;
+    protected int $conditionals = 0;
 
     protected int $conditionalsCovered = 0;
 
-    protected int $styleFiles    = 0;
+    protected int $styleFiles = 0;
 
-    protected int $styleErrors   = 0;
+    protected int $styleErrors = 0;
 
     protected int $styleFailures = 0;
 
     protected int $staticFileErrors = 0;
 
-    protected int $staticErrors     = 0;
+    protected int $staticErrors = 0;
 
     protected int $errorsSuits = 0;
 

@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace TestReportGenerator\src\Application\Controllers;
 
@@ -6,29 +7,29 @@ use TestReportGenerator\src\Application\Views\TestView;
 
 class ReportController
 {
-    private string $basePath      = '';
+    private string $basePath = '';
 
-    private string $destination   = '';
+    private string $destination = '';
 
-    private string $testLog       = '';
+    private string $testLog = '';
 
     /**
      * @var array<string, string>
      */
-    private array $langArray      = [];
+    private array $langArray = [];
 
-    private ?string $template     = null;
+    private ?string $template = null;
 
     /**
      * @var string[]
      */
-    private array $data           = [];
+    private array $data = [];
 
     private ?string $codeCoverage = null;
 
-    private ?string $codeStyle    = null;
+    private ?string $codeStyle = null;
 
-    private ?string $codeStyleJs  = null;
+    private ?string $codeStyleJs = null;
 
     private ?string $codeAnalysis = null;
 
