@@ -97,7 +97,7 @@ class Application
             return;
         }
 
-        $this->reportController = new ReportController($basePath, $destination, $testLog, $langArray, $template, $codeCoverage, $codeStyle, $codeStyleJs, $codeAnalysis, $argv);
+        $this->reportController                                 = new ReportController($basePath, $destination, $testLog, $langArray, $template, $codeCoverage, $codeStyle, $codeStyleJs, $codeAnalysis, $argv);
         $this->reportController->ONLY_INCLUDE_LANGUAGE_ELEMENTS = $onlyLanguage;
         $this->reportController->createReport();
     }

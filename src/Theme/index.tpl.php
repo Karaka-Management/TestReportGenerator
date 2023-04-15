@@ -136,7 +136,7 @@
                     <?php
                         $firstTestCase = false;
                         $previousClass = '';
-                        $i = 0;
+                        $i             = 0;
 
                         foreach ($this->testresult as $class => $result) : ++$i; ?>
                         <?php if ((isset($result['type']) && $result['type'] === 'testsuite')
