@@ -56,7 +56,7 @@
                     <p><?= $this->getText(':testing_summary_desc_1'); ?></p>
 
                     <h3><?= $this->getText(':testing_summary_coverage'); ?></h3>
-                    <table>
+                    <table class="category">
                         <thead>
                             <tr>
                                 <th><?= $this->getText(':description'); ?>
@@ -80,7 +80,7 @@
                     </table>
 
                     <h3><?= $this->getText(':testing_summary_tests'); ?></h3>
-                    <table>
+                    <table class="category">
                         <thead>
                             <tr>
                                 <th><?= $this->getText(':description'); ?>
@@ -94,14 +94,14 @@
                             <tr>
                                 <th><?= $this->getText(':test_suits'); ?>
                                 <td><?= $this->suits; ?>
-                                <td><?= $this->suits - $this->skippsSuits - $this->failuresSuits - $this->errorsSuits; ?><td><?= $this->skippsSuits; ?>
+                                <td><?= $this->suits - $this->skippsSuits - $this->warningSuits - $this->failuresSuits - $this->errorsSuits; ?><td><?= $this->skippsSuits; ?>
                                 <td><?= $this->warningsSuits; ?>
                                 <td><?= $this->failuresSuits; ?>
                                 <td><?= $this->errorsSuits; ?>
                             <tr>
                                 <th><?= $this->getText(':tests'); ?>
                                 <td><?= $this->tests; ?>
-                                <td><?= $this->tests - $this->skipps - $this->failures - $this->errors; ?>
+                                <td><?= $this->tests - $this->skipps - $this->warnings - $this->failures - $this->errors; ?>
                                 <td><?= $this->skipps; ?>
                                 <td><?= $this->warnings; ?>
                                 <td><?= $this->failures; ?>
@@ -117,10 +117,10 @@
                             <tr>
                                 <th><?= $this->getText(':code_style'); ?>
                                 <td><?= $this->styleFiles; ?>
-                                <td><?= $this->styleFiles - $this->styleErrors; ?>
+                                <td><?= $this->styleFiles - $this->styleFailures - $this->styleErrors; ?>
+                                <td>0
                                 <td>0
                                 <td><?= $this->styleFailures; ?>
-                                <td>0
                                 <td><?= $this->styleErrors; ?>
                     </table>
 
@@ -133,17 +133,26 @@
                 </section>
                 <section id="tests">
                     <h2><?= $this->getText(':tests'); ?></h2>
-                    <?php $firstTestCase                                            = false; $i = 0; foreach ($this->testresult as $class => $result) : ++$i; ?>
-                        <?php if ($result['type'] === 'testsuite') : $firstTestCase = true; ?>
+                    <?php
+                        $firstTestCase = false;
+                        $previousClass = '';
+                        $i = 0;
+
+                        foreach ($this->testresult as $class => $result) : ++$i; ?>
+                        <?php if ((isset($result['type']) && $result['type'] === 'testsuite')
+                            || (!isset($result['type']) && $class !== $previousClass && \stripos($class, ':') === false)) :
+                            $previousClass = $class;
+                            $firstTestCase = true;
+                        ?>
                             <?php if ($i > 1) : /* close description table! */ ?>
                                 </table>
                             <?php endif; ?>
 
-                            <h3><?= $result['info']['description']; ?></h3>
+                            <h3><?= $result['info']['description'] ?? \ltrim($class, '_'); ?></h3>
 
                             <section class="sub_testing_summary">
                                 <h4><?= $this->getText(':testing_summary_coverage'); ?></h4>
-                                <table>
+                                <table class="category">
                                     <thead>
                                         <tr>
                                             <th><?= $this->getText(':description'); ?>
@@ -167,7 +176,7 @@
                                 </table>
 
                                 <h4><?= $this->getText(':testing_summary_tests'); ?></h4>
-                                <table>
+                                <table class="category">
                                     <thead>
                                         <tr>
                                             <th><?= $this->getText(':description'); ?>
@@ -181,7 +190,7 @@
                                         <tr>
                                             <td><?= $this->getText(':tests'); ?>
                                             <td><?= $result['tests'] ?? 0; ?>
-                                            <td><?= $result['tests'] - $result['skips'] - $result['failures'] - $result['errors']; ?>
+                                            <td><?= $result['tests'] - $result['skips'] - $result['warnings'] - $result['failures'] - $result['errors']; ?>
                                             <td><?= $result['skips'] ?? 0; ?>
                                             <td><?= $result['warnings'] ?? 0; ?>
                                             <td><?= $result['failures'] ?? 0; ?>
@@ -199,8 +208,8 @@
                                             <td><?= $result['styletests'] ?? 0; ?>
                                             <td><?= $result['stylesuccess'] ?? 0; ?>
                                             <td>0
-                                            <td><?= $result['stylefailures'] ?? 0; ?>
                                             <td>0
+                                            <td><?= $result['stylefailures'] ?? 0; ?>
                                             <td><?= $result['styleerrors'] ?? 0; ?>
                                 </table>
                             </section>

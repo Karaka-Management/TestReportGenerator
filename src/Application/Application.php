@@ -85,6 +85,7 @@ class Application
         $codeStyle    = ($key = \array_search('-s', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
         $codeStyleJs  = ($key = \array_search('-sj', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
         $codeAnalysis = ($key = \array_search('-a', $argv)) === false || $key === \count($argv) - 1 ? null : \trim($argv[(int) $key + 1], '" ');
+        $onlyLanguage = \array_search('-ol', $argv) !== false;
 
         if ($template !== null && !\file_exists($template)) {
             echo 'File ' , $template , ' doesn\'t exist.' , "\n";
@@ -97,6 +98,7 @@ class Application
         }
 
         $this->reportController = new ReportController($basePath, $destination, $testLog, $langArray, $template, $codeCoverage, $codeStyle, $codeStyleJs, $codeAnalysis, $argv);
+        $this->reportController->ONLY_INCLUDE_LANGUAGE_ELEMENTS = $onlyLanguage;
         $this->reportController->createReport();
     }
 
@@ -112,5 +114,6 @@ class Application
         echo "\t" , '-sj Code style source (eslint `junit`) (*optional*)' , "\n";
         echo "\t" , '-a Code analysis source (phpstan `coverage-clover`) (*optional*)' , "\n";
         echo "\t" , '-l Language file (`php array`)' , "\n";
+        echo "\t" , '-ol Only consider elements which are also defined in the language array' , "\n";
     }
 }

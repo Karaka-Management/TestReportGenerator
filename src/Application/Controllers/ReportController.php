@@ -7,6 +7,8 @@ use TestReportGenerator\src\Application\Views\TestView;
 
 class ReportController
 {
+    public bool $ONLY_INCLUDE_LANGUAGE_ELEMENTS = false;
+
     private string $basePath = '';
 
     private string $destination = '';
@@ -178,7 +180,11 @@ class ReportController
             $test  = $testcase->getAttribute('name');
 
             if (!isset($this->langArray[$class . ':' . $test])) {
-                continue;
+                $class = '_' . $class;
+
+                if ($this->ONLY_INCLUDE_LANGUAGE_ELEMENTS) {
+                    continue;
+                }
             }
 
             $testReportData[$class . ':' . $test]['time'] = $testcase->getAttribute('time');
@@ -238,7 +244,11 @@ class ReportController
             $class = $testsuite->getAttribute('name');
 
             if (!isset($this->langArray[$class])) {
-                continue;
+                $class = '_' . $class;
+
+                if ($this->ONLY_INCLUDE_LANGUAGE_ELEMENTS) {
+                    continue;
+                }
             }
 
             $skipps   = $testsuite->getElementsByTagName('skipped');
@@ -294,7 +304,6 @@ class ReportController
         $classes = $dom->getElementsByTagName('class');
         foreach ($classes as $class) {
             $metrics   = $class->getElementsByTagName('metrics');
-
             $className = $class->getAttribute('name') . 'Test';
             $exploded  = \explode('\\', $className);
 
@@ -313,7 +322,11 @@ class ReportController
             $testView->addConditionalsCovered((int) $metrics[0]->getAttribute('coveredconditionals'));
 
             if (!isset($this->langArray[$className])) {
-                continue;
+                $className = '_' . $className;
+
+                if ($this->ONLY_INCLUDE_LANGUAGE_ELEMENTS) {
+                    continue;
+                }
             }
 
             $testReportData[$className]['methods']             = (int) $metrics[0]->getAttribute('methods');
@@ -358,7 +371,11 @@ class ReportController
             $className = \implode('\\', $exploded);
 
             if (!isset($this->langArray[$className])) {
-                continue;
+                $className = '_' . $className;
+
+                if ($this->ONLY_INCLUDE_LANGUAGE_ELEMENTS) {
+                    continue;
+                }
             }
 
             $testView->incrementStyleFiles();
@@ -405,7 +422,11 @@ class ReportController
             $className = \implode('\\', $exploded);
 
             if (!isset($this->langArray[$className])) {
-                continue;
+                $className = '_' . $className;
+
+                if ($this->ONLY_INCLUDE_LANGUAGE_ELEMENTS) {
+                    continue;
+                }
             }
 
             // check if file already checked during php test (phpcs also checks js files)
@@ -465,7 +486,11 @@ class ReportController
             $testView->addStaticErrors((int) ($file['errors'] ?? 0));
 
             if (!isset($this->langArray[$className])) {
-                continue;
+                $className = '_' . $className;
+
+                if ($this->ONLY_INCLUDE_LANGUAGE_ELEMENTS) {
+                    continue;
+                }
             }
 
             $testReportData[$className]['staticerrors'] = (int) ($file['errors'] ?? 0);
