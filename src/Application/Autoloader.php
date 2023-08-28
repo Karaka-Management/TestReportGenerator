@@ -28,7 +28,7 @@ final class Autoloader
     public static function defaultAutoloader(string $class) : void
     {
         $class = \ltrim($class, '\\');
-        $class = \str_replace(['_', '\\'], '/', $class);
+        $class = \strtr($class, '_\\', '//');
 
         foreach (self::$paths as $path) {
             if (\file_exists($file = $path . $class . '.php')) {
@@ -42,7 +42,7 @@ final class Autoloader
     public static function exists(string $class) : bool
     {
         $class = \ltrim($class, '\\');
-        $class = \str_replace(['_', '\\'], '/', $class);
+        $class = \strtr($class, '_\\', '//');
 
         foreach (self::$paths as $path) {
             if (\file_exists($path . $class . '.php')) {
