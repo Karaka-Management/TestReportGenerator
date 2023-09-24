@@ -4,6 +4,30 @@ name: CI
 on: [push, pull_request]
 
 jobs:
+  hash_generation:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'NO_CI')"
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@main
+      with:
+        fetch-depth: 1
+    - name: hash
+      run: find ./ -type f -not -path "./vendor/*" -name -exec md5sum {} \; > hashs.txt
+    - name: Check for modified files
+      id: git-check
+      run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD --; then echo "false"; else echo "true"; fi)
+    - name: Push changes
+      if: steps.git-check.outputs.modified == 'true'
+      run: |
+        git config --global user.name 'Hash Bot'
+        git config --global user.email 'hash.bot@jingga.app'
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git commit -am "Automated hash generation (NO_CI)"
+        git push
   autoformat:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'NO_CI')"
@@ -38,7 +62,7 @@ jobs:
           git config --global user.name 'Formatter Bot'
           git config --global user.email 'formatter.bot@orange-management.email'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git commit -am "Automated formatting changes"
+          git commit -am "Automated formatting changes (NO_CI)"
           git push
   static-tests:
     runs-on: ubuntu-latest
