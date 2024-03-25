@@ -1,6 +1,6 @@
 {
     "name": "karaka-management/testreportgenerator",
-    "description": "PHP Test Report Generator for Orange Management.",
+    "description": "PHP Test Report Generator for Jingga.",
     "authors": [
         {
             "name": "Dennis Eichhorn",
@@ -10,7 +10,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Jingga-Management/TestReportGenerator.git"
+            "url": "https://github.com/Karaka-Management/TestReportGenerator.git"
         }
     ],
     "require-dev": {
