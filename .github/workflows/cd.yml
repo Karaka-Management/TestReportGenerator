@@ -1,21 +1,21 @@
 name:  CD
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Release Tag'     
+        description: 'Release Tag'
         required: true
 
 env:
   APP_NAME: TestReportGenerator
 
 jobs:
-  build: 
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['8.1']
+        php-versions: ['8.3']
     permissions:
       contents: write
     steps:
