@@ -14,7 +14,7 @@
         }
     ],
     "require-dev": {
-        "squizlabs/php_codesniffer": ">=3.5",
+        "phpcsstandards/php_codesniffer": ">=3.5",
         "friendsofphp/php-cs-fixer": ">=2.16.1",
         "phpstan/phpstan": ">=1.8.6"
     },
